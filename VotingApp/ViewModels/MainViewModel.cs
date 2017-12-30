@@ -11,7 +11,12 @@ namespace EventVoting.VotingApp.ViewModels
     {
         public MainViewModel()
         {
-            
+            var context = ApplicationData.Current.DbContext;
+            context.Appliance.Add(new Appliance { DeviceId = Guid.NewGuid().ToByteArray() });
+            context.SaveChanges();
+            context.Dispose();
         }
+
+
     }
 }
