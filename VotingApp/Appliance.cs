@@ -14,7 +14,7 @@ namespace EventVoting.VotingApp
     
     public partial class Appliance
     {
-        public long Id { get; set; }
+        public long Id { get; private set; }
         public int Type { get; set; }
         public byte[] DeviceId { get; set; }
     }

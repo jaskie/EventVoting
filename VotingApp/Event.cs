@@ -14,7 +14,7 @@ namespace EventVoting.VotingApp
     
     public partial class Event
     {
-        public long Id { get; set; }
+        public long Id { get; private set; }
         public string Name { get; set; }
     }
 }

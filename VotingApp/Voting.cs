@@ -14,10 +14,10 @@ namespace EventVoting.VotingApp
     
     public partial class Voting
     {
-        public long Id { get; set; }
+        public long Id { get; private set; }
         public string Name { get; set; }
         public Nullable<System.DateTime> Start { get; set; }
         public Nullable<System.DateTime> End { get; set; }
-        public Nullable<long> EventId { get; set; }
+        public Nullable<long> IdEvent { get; set; }
     }
 }

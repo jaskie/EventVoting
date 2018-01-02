@@ -13,11 +13,12 @@ namespace EventVoting.VotingApp
     using System.Data.Entity;
     using System.Data.Entity.Infrastructure;
     
-    public partial class mainEntities : DbContext
+    public partial class DatabaseContext : DbContext
     {
-        public mainEntities()
-            : base("name=mainEntities")
+        public DatabaseContext()
+            : base("name=DatabaseContext")
         {
+            this.Configuration.LazyLoadingEnabled = false;
         }
     
         protected override void OnModelCreating(DbModelBuilder modelBuilder)

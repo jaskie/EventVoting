@@ -6,9 +6,9 @@
     <edmx:Diagrams>
       <Diagram DiagramId="fbf7453ab6bb412c8efad2c89f669d19" Name="Diagram1">
         <EntityTypeShape EntityType="DomainModel.Appliance" Width="1.5" PointX="0.75" PointY="0.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="DomainModel.Vote" Width="1.5" PointX="2.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="DomainModel.Vote" Width="1.5" PointX="3.375" PointY="0.875" IsExpanded="true" />
         <EntityTypeShape EntityType="DomainModel.Voting" Width="1.5" PointX="0.875" PointY="3" IsExpanded="true" />
-        <EntityTypeShape EntityType="DomainModel.Event" Width="1.5" PointX="3.125" PointY="3.375" />
+        <EntityTypeShape EntityType="DomainModel.Event" Width="1.5" PointX="3.625" PointY="3.375" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

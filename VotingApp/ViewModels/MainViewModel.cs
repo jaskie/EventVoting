@@ -17,6 +17,5 @@ namespace EventVoting.VotingApp.ViewModels
             context.Dispose();
         }
 
-
     }
 }

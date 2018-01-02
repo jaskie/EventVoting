@@ -34,7 +34,7 @@
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="integer" Nullable="false" StoreGeneratedPattern="Identity" />
-          <Property Name="EventId" Type="integer" />
+          <Property Name="IdEvent" Type="integer" />
           <Property Name="Start" Type="datetime" />
           <Property Name="End" Type="datetime" />
           <Property Name="Name" Type="nvarchar" MaxLength="2147483647" />
@@ -53,7 +53,7 @@
           <Key>
             <PropertyRef Name="Id" />
           </Key>
-          <Property Name="Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" a:SetterAccess="Private" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
           <Property Name="Type" Type="Int32" Nullable="false" />
           <Property Name="DeviceId" Type="Binary" MaxLength="2147483647" FixedLength="false" Nullable="false" />
         </EntityType>
@@ -61,7 +61,7 @@
           <Key>
             <PropertyRef Name="Id" />
           </Key>
-          <Property Name="Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" a:SetterAccess="Private" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
           <Property Name="IdVoting" Type="Int64" Nullable="false" />
           <Property Name="IdAppliance" Type="Int64" Nullable="false" />
           <Property Name="Result" Type="Int32" />
@@ -70,13 +70,13 @@
           <Key>
             <PropertyRef Name="Id" />
           </Key>
-          <Property Name="Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" a:SetterAccess="Private" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
           <Property Name="Name" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
           <Property Name="Start" Type="DateTime" />
           <Property Name="End" Type="DateTime" />
-          <Property Name="EventId" Type="Int64" />
+          <Property Name="IdEvent" Type="Int64" />
         </EntityType>
-        <EntityContainer Name="mainEntities" annotation:LazyLoadingEnabled="true">
+        <EntityContainer Name="DatabaseContext" annotation:LazyLoadingEnabled="false">
           <EntitySet Name="Appliance" EntityType="Self.Appliance" />
           <EntitySet Name="Vote" EntityType="Self.Vote" />
           <EntitySet Name="Voting" EntityType="Self.Voting" />
@@ -86,7 +86,7 @@
           <Key>
             <PropertyRef Name="Id" />
           </Key>
-          <Property Name="Id" Type="Int64" Nullable="false" />
+          <Property Name="Id" Type="Int64" Nullable="false" a:SetterAccess="Private" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
           <Property Name="Name" Type="String" MaxLength="2147483647" FixedLength="false" Unicode="true" />
         </EntityType>
       </Schema>
@@ -94,7 +94,7 @@
     <!-- C-S mapping content -->
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
-        <EntityContainerMapping StorageEntityContainer="DomainModelStoreContainer" CdmEntityContainer="mainEntities">
+        <EntityContainerMapping StorageEntityContainer="DomainModelStoreContainer" CdmEntityContainer="DatabaseContext">
           <EntitySetMapping Name="Appliance">
             <EntityTypeMapping TypeName="DomainModel.Appliance">
               <MappingFragment StoreEntitySet="Appliance">
@@ -117,7 +117,7 @@
           <EntitySetMapping Name="Voting">
             <EntityTypeMapping TypeName="DomainModel.Voting">
               <MappingFragment StoreEntitySet="Voting">
-                <ScalarProperty Name="EventId" ColumnName="EventId" />
+                <ScalarProperty Name="IdEvent" ColumnName="IdEvent" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="Start" ColumnName="Start" />
