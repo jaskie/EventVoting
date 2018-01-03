@@ -13,10 +13,10 @@ namespace EventVoting.VotingApp
     using System.Data.Entity;
     using System.Data.Entity.Infrastructure;
     
-    public partial class DatabaseContext : DbContext
+    public partial class VotingDbContext : DbContext
     {
-        public DatabaseContext()
-            : base("name=DatabaseContext")
+        public VotingDbContext()
+            : base("name=VotingDbContext")
         {
             this.Configuration.LazyLoadingEnabled = false;
         }

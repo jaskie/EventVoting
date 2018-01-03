@@ -97,6 +97,8 @@
     <Compile Include="Appliance.cs">
       <DependentUpon>DataModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Model\ApplianceTypeEnum.cs" />
+    <Compile Include="Database\DatabaseInitializer.cs" />
     <Compile Include="DataModel.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>

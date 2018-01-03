@@ -76,7 +76,7 @@
           <Property Name="End" Type="DateTime" />
           <Property Name="IdEvent" Type="Int64" />
         </EntityType>
-        <EntityContainer Name="DatabaseContext" annotation:LazyLoadingEnabled="false">
+        <EntityContainer Name="VotingDbContext" annotation:LazyLoadingEnabled="false">
           <EntitySet Name="Appliance" EntityType="Self.Appliance" />
           <EntitySet Name="Vote" EntityType="Self.Vote" />
           <EntitySet Name="Voting" EntityType="Self.Voting" />
@@ -94,7 +94,7 @@
     <!-- C-S mapping content -->
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
-        <EntityContainerMapping StorageEntityContainer="DomainModelStoreContainer" CdmEntityContainer="DatabaseContext">
+        <EntityContainerMapping StorageEntityContainer="DomainModelStoreContainer" CdmEntityContainer="VotingDbContext">
           <EntitySetMapping Name="Appliance">
             <EntityTypeMapping TypeName="DomainModel.Appliance">
               <MappingFragment StoreEntitySet="Appliance">
