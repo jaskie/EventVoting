@@ -10,6 +10,9 @@
                     <local:Bootstrapper x:Key="bootstrapper"/>
                 </ResourceDictionary>
             </ResourceDictionary.MergedDictionaries>
+            <Image Source="Icons\document-open-5.png" x:Key="OpenIcon"/>
+            <Image Source="Icons\document-new-5.png" x:Key="NewIcon"/>
+            <Image Source="Icons\document-close-2.png" x:Key="CloseIcon"/>
         </ResourceDictionary>
     </Application.Resources>
 </Application>

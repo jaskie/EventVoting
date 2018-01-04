@@ -6,7 +6,16 @@
         mc:Ignorable="d"
         Title="Voting controller"
         Height="350" Width="525">
-    <Grid>
-        
-    </Grid>
+    <DockPanel>
+        <Menu DockPanel.Dock="Top" IsMainMenu="True" >
+            <MenuItem Header="Event">
+                <MenuItem x:Name="EventCreate" Header="Create new" Icon="{StaticResource NewIcon}"/>
+                <MenuItem x:Name="EventSelect"  Header="Select existing" Icon="{StaticResource OpenIcon}"/>
+                <MenuItem x:Name="EventClose"  Header="Close event" Icon="{StaticResource CloseIcon}"/>
+            </MenuItem>
+        </Menu>
+        <Grid>
+
+        </Grid>
+    </DockPanel>
 </Window>
