@@ -1,32 +1,40 @@
 ﻿using Caliburn.Micro;
 using System;
 using System.Collections.Generic;
+using System.Dynamic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace EventVoting.VotingApp.ViewModels
 {
     public class MainViewModel : Screen
     {
         private EventViewModel _selectedEvent;
+        private readonly IWindowManager _windowManager;
 
-        public MainViewModel()
+        public MainViewModel(IWindowManager windowManager)
         {
-            var context = ApplicationData.Current.DbContext;
-            context.Appliance.Add(new Appliance { DeviceId = Guid.NewGuid().ToByteArray() });
-            context.SaveChanges();
-            context.Dispose();
+            _windowManager = windowManager;
+            using (var context = IoC.Get<VotingDbContext>())
+            {
+                context.Appliance.Add(new Appliance { DeviceId = Guid.NewGuid().ToByteArray() });
+                context.SaveChanges();
+                context.Dispose();
+            }
         }
 
         public void EventCreate()
         {
-            SelectedEvent = new EventViewModel();
+            SelectedEvent = new EventViewModel(new Event());
         }
 
         public void EventSelect()
         {
-
+            var eventList = new EventListViewModel();
+            if (_windowManager.ShowDialog(eventList) == true)
+                SelectedEvent = new EventViewModel(eventList.SelectedEvent);
         }
 
         public void EventClose()
