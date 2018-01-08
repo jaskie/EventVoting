@@ -3,16 +3,26 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:EventVoting.VotingApp.Views"
+        xmlns:cal="http://www.caliburnproject.org"
+        xmlns:vm="clr-namespace:EventVoting.VotingApp.ViewModels"
         mc:Ignorable="d"
         Width="450"
         Height="350"
         Title="Select an existing event"
+        d:DataContext="{d:DesignInstance vm:EventListViewModel}"
         >
     <DockPanel>
-        <Menu IsMainMenu="True">
-            
-        </Menu>
-        <DataGrid x:Name="Events" CanUserAddRows="False" CanUserDeleteRows="False" AutoGenerateColumns="True"></DataGrid>
+        <StackPanel DockPanel.Dock="Bottom" HorizontalAlignment="Right" Orientation="Horizontal">
+            <Button x:Name="Ok" Style="{StaticResource OkButton}"/>
+            <Button x:Name="Cancel" Style="{StaticResource CancelButton}"/>
+        </StackPanel>
+        <DataGrid ItemsSource="{Binding Events}" 
+                  SelectedItem="{Binding SelectedEvent}" 
+                  cal:Message.Attach="[Event MouseDoubleClick] = [Action EditEvent($this)]"
+                  CanUserAddRows="False" CanUserDeleteRows="False" AutoGenerateColumns="False" IsReadOnly="True">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Event title" Width="*" Binding="{Binding Name}" />
+            </DataGrid.Columns>
+        </DataGrid>
     </DockPanel>
 </Window>

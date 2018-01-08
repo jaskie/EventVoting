@@ -111,9 +111,13 @@
       <DependentUpon>DataModel.tt</DependentUpon>
     </Compile>
     <Compile Include="ViewModels\EventListViewModel.cs" />
+    <Compile Include="ViewModels\EventPropertiesViewModel.cs" />
     <Compile Include="ViewModels\EventViewModel.cs" />
     <Compile Include="Views\EventListView.xaml.cs">
       <DependentUpon>EventListView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\EventPropertiesView.xaml.cs">
+      <DependentUpon>EventPropertiesView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Vote.cs">
       <DependentUpon>DataModel.tt</DependentUpon>
@@ -125,6 +129,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Views\EventPropertiesView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\MainView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -133,7 +141,6 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="ApplicationData.cs" />
     <Compile Include="Bootstrapper.cs" />
     <Compile Include="DataModel.Context.cs">
       <AutoGen>True</AutoGen>

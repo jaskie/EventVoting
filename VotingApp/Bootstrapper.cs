@@ -1,4 +1,5 @@
 ﻿using Caliburn.Micro;
+using EventVoting.VotingApp.Database;
 using EventVoting.VotingApp.ViewModels;
 using System;
 using System.Collections.Generic;
@@ -17,6 +18,7 @@ namespace EventVoting.VotingApp
 
         protected override void OnStartup(object sender, StartupEventArgs e)
         {
+            System.Data.Entity.Database.SetInitializer(new DatabaseInitializer());
             _container
                 .PerRequest<VotingDbContext>()
                 .Singleton<IWindowManager, WindowManager>()

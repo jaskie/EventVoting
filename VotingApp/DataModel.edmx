@@ -17,7 +17,7 @@
           <Key>
             <PropertyRef Name="Id" />
           </Key>
-          <Property Name="Id" Type="integer" Nullable="false" />
+          <Property Name="Id" Type="integer" Nullable="false" StoreGeneratedPattern="Identity" />
           <Property Name="Name" Type="nvarchar" MaxLength="2147483647" />
         </EntityType>
         <EntityType Name="Vote">
@@ -86,7 +86,7 @@
           <Key>
             <PropertyRef Name="Id" />
           </Key>
-          <Property Name="Id" Type="Int64" Nullable="false" a:SetterAccess="Private" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
+          <Property Name="Id" Type="Int64" Nullable="false" a:SetterAccess="Private" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Name" Type="String" MaxLength="2147483647" FixedLength="false" Unicode="true" />
         </EntityType>
       </Schema>

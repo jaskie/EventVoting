@@ -13,6 +13,20 @@
             <Image Source="Icons\document-open-5.png" x:Key="OpenIcon"/>
             <Image Source="Icons\document-new-5.png" x:Key="NewIcon"/>
             <Image Source="Icons\document-close-2.png" x:Key="CloseIcon"/>
+            
+            <Style x:Key="OkButton" TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
+                <Setter Property="IsDefault" Value="true"/>
+                <Setter Property="Margin" Value="10, 5"/>
+                <Setter Property="Padding" Value="20, 10"/>
+                <Setter Property="Content" Value="Ok"/>
+            </Style>
+
+            <Style x:Key="CancelButton" TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
+                <Setter Property="IsDefault" Value="true"/>
+                <Setter Property="Margin" Value="10, 5"/>
+                <Setter Property="Padding" Value="20, 10"/>
+                <Setter Property="Content" Value="Cancel"/>
+            </Style>
         </ResourceDictionary>
     </Application.Resources>
 </Application>

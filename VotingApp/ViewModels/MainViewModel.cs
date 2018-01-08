@@ -27,7 +27,16 @@ namespace EventVoting.VotingApp.ViewModels
 
         public void EventCreate()
         {
-            SelectedEvent = new EventViewModel(new Event());
+            var @event = new Event { Name = "New event" };
+            if (_windowManager.ShowDialog(new EventPropertiesViewModel(@event)) == true)
+            {
+                using (var context = IoC.Get<VotingDbContext>())
+                {
+                    context.Event.Add(@event);
+                    context.SaveChanges();
+                }
+                SelectedEvent = new EventViewModel(@event);
+            }
         }
 
         public void EventSelect()
