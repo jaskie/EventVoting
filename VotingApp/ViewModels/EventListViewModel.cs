@@ -8,15 +8,15 @@ using System.Threading.Tasks;
 
 namespace EventVoting.VotingApp.ViewModels
 {
-    public class EventListViewModel : Screen
+    public class EventListViewModel : Screen, IDisposable
     {
         private Event _selectedEvent;
-        private VotingDbContext _votingDbContext;
+        private readonly VotingDbContext _votingDbContext;
 
         public EventListViewModel()
         {
             _votingDbContext = IoC.Get<VotingDbContext>();
-            _votingDbContext.Event.Load();
+                _votingDbContext.Event.Load();
         }
 
         public Event SelectedEvent
@@ -33,7 +33,7 @@ namespace EventVoting.VotingApp.ViewModels
         }
 
         public IEnumerable<Event> Events => _votingDbContext.Event.Local;
-        
+
 
         public bool CanOk => SelectedEvent != null;
 
@@ -48,5 +48,27 @@ namespace EventVoting.VotingApp.ViewModels
                 _votingDbContext.SaveChanges();
             }
         }
+
+        #region IDisposable Support
+        private bool disposedValue = false; // To detect redundant calls
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!disposedValue)
+            {
+                if (disposing)
+                {
+                    _votingDbContext.Dispose();
+                }
+                disposedValue = true;
+            }
+        }
+
+        public void Dispose()
+        {
+            // Do not change this code. Put cleanup code in Dispose(bool disposing) above.
+            Dispose(true);
+        }
+        #endregion
     }
 }

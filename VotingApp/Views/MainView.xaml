@@ -4,7 +4,6 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d"
-        Title="Voting controller"
         Height="350" Width="525">
     <DockPanel>
         <Menu DockPanel.Dock="Top" IsMainMenu="True" >
@@ -14,8 +13,6 @@
                 <MenuItem x:Name="EventClose"  Header="Close event" Icon="{StaticResource CloseIcon}"/>
             </MenuItem>
         </Menu>
-        <Grid>
-
-        </Grid>
+        <ContentControl x:Name="SelectedEvent"/>
     </DockPanel>
 </Window>

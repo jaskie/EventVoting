@@ -13,15 +13,16 @@ namespace EventVoting.VotingApp.ViewModels
     {
         private EventViewModel _selectedEvent;
         private readonly IWindowManager _windowManager;
+        private static readonly string WindowTitle = "Voting controller";
 
         public MainViewModel(IWindowManager windowManager)
         {
             _windowManager = windowManager;
+            DisplayName = WindowTitle;
             using (var context = IoC.Get<VotingDbContext>())
             {
                 context.Appliance.Add(new Appliance { DeviceId = Guid.NewGuid().ToByteArray() });
                 context.SaveChanges();
-                context.Dispose();
             }
         }
 
@@ -41,9 +42,11 @@ namespace EventVoting.VotingApp.ViewModels
 
         public void EventSelect()
         {
-            var eventList = new EventListViewModel();
-            if (_windowManager.ShowDialog(eventList) == true)
-                SelectedEvent = new EventViewModel(eventList.SelectedEvent);
+            using (var eventList = new EventListViewModel())
+            {
+                if (_windowManager.ShowDialog(eventList) == true)
+                    SelectedEvent = new EventViewModel(eventList.SelectedEvent);
+            }
         }
 
         public void EventClose()
@@ -66,6 +69,7 @@ namespace EventVoting.VotingApp.ViewModels
                 if (_selectedEvent == value)
                     return;
                 _selectedEvent = value;
+                DisplayName = value == null ? WindowTitle : $"{WindowTitle} [{value.Event.Name}]";
                 NotifyOfPropertyChange();
                 NotifyOfPropertyChange(nameof(CanEventClose));
                 NotifyOfPropertyChange(nameof(CanEventCreate));
