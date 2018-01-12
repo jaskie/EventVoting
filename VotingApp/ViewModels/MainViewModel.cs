@@ -36,7 +36,7 @@ namespace EventVoting.VotingApp.ViewModels
                     context.Event.Add(@event);
                     context.SaveChanges();
                 }
-                SelectedEvent = new EventViewModel(@event);
+                SelectedEvent = new EventViewModel(_windowManager, @event);
             }
         }
 
@@ -45,7 +45,7 @@ namespace EventVoting.VotingApp.ViewModels
             using (var eventList = new EventListViewModel())
             {
                 if (_windowManager.ShowDialog(eventList) == true)
-                    SelectedEvent = new EventViewModel(eventList.SelectedEvent);
+                    SelectedEvent = new EventViewModel(_windowManager, eventList.SelectedEvent);
             }
         }
 
@@ -68,6 +68,7 @@ namespace EventVoting.VotingApp.ViewModels
             {
                 if (_selectedEvent == value)
                     return;
+                _selectedEvent?.Dispose();
                 _selectedEvent = value;
                 DisplayName = value == null ? WindowTitle : $"{WindowTitle} [{value.Event.Name}]";
                 NotifyOfPropertyChange();

@@ -4,13 +4,13 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d"
-        Height="350" Width="525">
+        >
     <DockPanel>
         <Menu DockPanel.Dock="Top" IsMainMenu="True" >
             <MenuItem Header="Event">
-                <MenuItem x:Name="EventCreate" Header="Create new" Icon="{StaticResource NewIcon}"/>
-                <MenuItem x:Name="EventSelect"  Header="Select existing" Icon="{StaticResource OpenIcon}"/>
-                <MenuItem x:Name="EventClose"  Header="Close event" Icon="{StaticResource CloseIcon}"/>
+                <MenuItem x:Name="EventCreate" Header="Create new" Icon="{StaticResource EventNewIcon}"/>
+                <MenuItem x:Name="EventSelect"  Header="Select existing" Icon="{StaticResource EventOpenIcon}"/>
+                <MenuItem x:Name="EventClose"  Header="Close event" Icon="{StaticResource EventCloseIcon}"/>
             </MenuItem>
         </Menu>
         <ContentControl x:Name="SelectedEvent"/>

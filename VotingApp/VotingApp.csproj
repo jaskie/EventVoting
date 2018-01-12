@@ -111,10 +111,14 @@
       <DependentUpon>DataModel.tt</DependentUpon>
     </Compile>
     <Compile Include="ViewModels\EventListViewModel.cs" />
+    <Compile Include="ViewModels\VotingPropertiesViewModel.cs" />
     <Compile Include="ViewModels\EventPropertiesViewModel.cs" />
     <Compile Include="ViewModels\EventViewModel.cs" />
     <Compile Include="Views\EventListView.xaml.cs">
       <DependentUpon>EventListView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\VotingPropertiesView.xaml.cs">
+      <DependentUpon>VotingPropertiesView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\EventPropertiesView.xaml.cs">
       <DependentUpon>EventPropertiesView.xaml</DependentUpon>
@@ -131,6 +135,10 @@
     <Page Include="Views\EventListView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\VotingPropertiesView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\EventPropertiesView.xaml">
       <SubType>Designer</SubType>
@@ -196,9 +204,12 @@
     <AppDesigner Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Icons\document-close-2.png" />
-    <Resource Include="Icons\document-new-5.png" />
-    <Resource Include="Icons\document-open-5.png" />
+    <Resource Include="Icons\voting-stop.png" />
+    <Resource Include="Icons\voting-start.png" />
+    <Resource Include="Icons\voting-new.png" />
+    <Resource Include="Icons\event-close.png" />
+    <Resource Include="Icons\event-new.png" />
+    <Resource Include="Icons\event-open.png" />
     <EmbeddedResource Include="Database\Schema.sql" />
     <Content Include="DataModel.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>

@@ -16,7 +16,7 @@ namespace EventVoting.VotingApp.ViewModels
         public EventListViewModel()
         {
             _votingDbContext = IoC.Get<VotingDbContext>();
-                _votingDbContext.Event.Load();
+            _votingDbContext.Event.Load();
         }
 
         public Event SelectedEvent

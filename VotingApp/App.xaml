@@ -10,9 +10,21 @@
                     <local:Bootstrapper x:Key="bootstrapper"/>
                 </ResourceDictionary>
             </ResourceDictionary.MergedDictionaries>
-            <Image Source="Icons\document-open-5.png" x:Key="OpenIcon"/>
-            <Image Source="Icons\document-new-5.png" x:Key="NewIcon"/>
-            <Image Source="Icons\document-close-2.png" x:Key="CloseIcon"/>
+            <Style x:Key="ButtonImage" TargetType="Image">
+                <Style.Triggers>
+                    <Trigger Property="IsEnabled" Value="false">
+                        <Setter Property="Opacity" Value="0.5" />
+                    </Trigger>
+                </Style.Triggers>
+            </Style>
+
+            <Image Source="Icons\event-open.png" x:Key="EventOpenIcon"/>
+            <Image Source="Icons\event-new.png" x:Key="EventNewIcon"/>
+            <Image Source="Icons\event-close.png" x:Key="EventCloseIcon"/>
+            <Image Source="Icons\voting-new.png" x:Key="VotingNewIcon"/>
+            <Image Source="Icons\voting-start.png" x:Key="VotingStartIcon" Style="{StaticResource ButtonImage}"/>
+            <Image Source="Icons\voting-stop.png" x:Key="VotingStopIcon" Style="{StaticResource ButtonImage}"/>
+
             
             <Style x:Key="OkButton" TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
                 <Setter Property="IsDefault" Value="true"/>

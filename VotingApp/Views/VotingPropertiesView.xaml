@@ -1,0 +1,20 @@
+﻿<Window x:Class="EventVoting.VotingApp.Views.VotingPropertiesView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:vm="clr-namespace:EventVoting.VotingApp.ViewModels"
+        mc:Ignorable="d"
+        d:DataContext="{d:DesignInstance vm:EventPropertiesViewModel}"
+        Title="Voting properties" Height="150" Width="300">
+    <DockPanel>
+        <StackPanel DockPanel.Dock="Bottom" HorizontalAlignment="Right" Orientation="Horizontal">
+            <Button x:Name="Ok" Style="{StaticResource OkButton}"/>
+            <Button x:Name="Cancel" Style="{StaticResource CancelButton}"/>
+        </StackPanel>
+        <StackPanel>
+            <Label Content="Voting title"/>
+            <TextBox Margin="5" Text="{Binding Voting.Name}"/>
+        </StackPanel>
+    </DockPanel>
+</Window>
