@@ -1,0 +1,1 @@
+﻿This is placeholder file for database directory

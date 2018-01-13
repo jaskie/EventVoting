@@ -8,24 +8,25 @@ namespace EventVoting.VotingApp.ViewModels
 {
     public class EventViewModel: PropertyChangedBase, IDisposable
     {
-        private readonly VotingDbContext _votingDbContext;
+        private readonly VotingDbContext _db;
         private readonly IWindowManager _windowManager;
-        private Voting _selectedVoting;
-        private Voting _votingInProgress;
+        private VotingViewModel _selectedVoting;
+        private VotingViewModel _votingInProgress;
         
-        public EventViewModel(IWindowManager windowManager, Event @event)
+        public EventViewModel(Event @event)
         {
             Event = @event;
-            _windowManager = windowManager;
-            _votingDbContext = IoC.Get<VotingDbContext>();
-            _votingDbContext.Voting.Where(v => v.IdEvent == @event.Id).Load();
+            _windowManager = IoC.Get<IWindowManager>();
+            _db = IoC.Get<VotingDbContext>();
+            _db.Voting.Where(v => v.IdEvent == @event.Id).Load();
+            Votings = new BindableCollection<VotingViewModel>(_db.Voting.Local.Select(v => new VotingViewModel(v)));
         }
 
         public Event Event { get; }
 
-        public IEnumerable<Voting> Votings => _votingDbContext.Voting.Local;
+        public IList<VotingViewModel> Votings { get; }
 
-        public Voting SelectedVoting {
+        public VotingViewModel SelectedVoting {
             get => _selectedVoting;
             set
             {
@@ -42,16 +43,19 @@ namespace EventVoting.VotingApp.ViewModels
             var voting = new Voting { Name = "New voting", IdEvent = Event.Id };
             if (_windowManager.ShowDialog(new VotingPropertiesViewModel(voting)) == true)
             {
-                _votingDbContext.Voting.Add(voting);
-                _votingDbContext.SaveChanges();
-                SelectedVoting = voting;
+                _db.Voting.Attach(voting);
+                _db.Entry(voting).State = EntityState.Added;
+                _db.SaveChanges();
+                var vm = new VotingViewModel(voting);
+                Votings.Add(vm);
+                SelectedVoting = vm;
             }
         }
 
         public void StartVoting()
         {
             _selectedVoting.Start = DateTime.Now;
-            _votingDbContext.SaveChanges();
+            _db.SaveChanges();
             VotingInProgress = _selectedVoting;
         }
 
@@ -60,13 +64,13 @@ namespace EventVoting.VotingApp.ViewModels
         public void StopVoting()
         {
             _votingInProgress.End = DateTime.Now;
-            _votingDbContext.SaveChanges();
+            _db.SaveChanges();
             VotingInProgress = null;
         }
 
         public bool CanStopVoting => _votingInProgress != null;
 
-        public Voting VotingInProgress
+        public VotingViewModel VotingInProgress
         {
             get => _votingInProgress;
             set
@@ -89,7 +93,7 @@ namespace EventVoting.VotingApp.ViewModels
             {
                 if (disposing)
                 {
-                    _votingDbContext.Dispose();
+                    _db.Dispose();
                 }
                 disposedValue = true;
             }

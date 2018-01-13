@@ -28,7 +28,7 @@ namespace EventVoting.VotingApp
     
         public virtual DbSet<Appliance> Appliance { get; set; }
         public virtual DbSet<Vote> Vote { get; set; }
-        public virtual DbSet<Voting> Voting { get; set; }
         public virtual DbSet<Event> Event { get; set; }
+        public virtual DbSet<Voting> Voting { get; set; }
     }
 }

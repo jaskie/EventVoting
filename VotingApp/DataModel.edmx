@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-    <Schema Namespace="DomainModel.Store" Provider="System.Data.SQLite.EF6" ProviderManifestToken="Data Source=C:\Projects\Dyplom\VotingApp\Database\EventVoting.db" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="DomainModel.Store" Provider="System.Data.SQLite.EF6" ProviderManifestToken="Data Source=C:\Projects\EventVoting\VotingApp\Database\EventVoting.db" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="Appliance">
           <Key>
             <PropertyRef Name="Id" />
@@ -34,7 +34,7 @@
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="integer" Nullable="false" StoreGeneratedPattern="Identity" />
-          <Property Name="IdEvent" Type="integer" />
+          <Property Name="IdEvent" Type="integer" Nullable="false" />
           <Property Name="Start" Type="datetime" />
           <Property Name="End" Type="datetime" />
           <Property Name="Name" Type="nvarchar" MaxLength="2147483647" />
@@ -66,27 +66,27 @@
           <Property Name="IdAppliance" Type="Int64" Nullable="false" />
           <Property Name="Result" Type="Int32" />
         </EntityType>
-        <EntityType Name="Voting">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" a:SetterAccess="Private" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
-          <Property Name="Name" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
-          <Property Name="Start" Type="DateTime" />
-          <Property Name="End" Type="DateTime" />
-          <Property Name="IdEvent" Type="Int64" />
-        </EntityType>
         <EntityContainer Name="VotingDbContext" annotation:LazyLoadingEnabled="false">
           <EntitySet Name="Appliance" EntityType="Self.Appliance" />
           <EntitySet Name="Vote" EntityType="Self.Vote" />
-          <EntitySet Name="Voting" EntityType="Self.Voting" />
           <EntitySet Name="Event" EntityType="DomainModel.Event" />
+          <EntitySet Name="Voting" EntityType="DomainModel.Voting" />
         </EntityContainer>
         <EntityType Name="Event">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="Int64" Nullable="false" a:SetterAccess="Private" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="2147483647" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="Voting">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int64" Nullable="false" a:SetterAccess="Private" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="IdEvent" Type="Int64" Nullable="false" />
+          <Property Name="Start" Type="DateTime" />
+          <Property Name="End" Type="DateTime" />
           <Property Name="Name" Type="String" MaxLength="2147483647" FixedLength="false" Unicode="true" />
         </EntityType>
       </Schema>
@@ -114,21 +114,21 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="Voting">
-            <EntityTypeMapping TypeName="DomainModel.Voting">
-              <MappingFragment StoreEntitySet="Voting">
-                <ScalarProperty Name="IdEvent" ColumnName="IdEvent" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
-                <ScalarProperty Name="Name" ColumnName="Name" />
-                <ScalarProperty Name="Start" ColumnName="Start" />
-                <ScalarProperty Name="End" ColumnName="End" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="Event">
             <EntityTypeMapping TypeName="DomainModel.Event">
               <MappingFragment StoreEntitySet="Event">
                 <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Voting">
+            <EntityTypeMapping TypeName="DomainModel.Voting">
+              <MappingFragment StoreEntitySet="Voting">
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="End" ColumnName="End" />
+                <ScalarProperty Name="Start" ColumnName="Start" />
+                <ScalarProperty Name="IdEvent" ColumnName="IdEvent" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>

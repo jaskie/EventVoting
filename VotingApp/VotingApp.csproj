@@ -114,6 +114,7 @@
     <Compile Include="ViewModels\VotingPropertiesViewModel.cs" />
     <Compile Include="ViewModels\EventPropertiesViewModel.cs" />
     <Compile Include="ViewModels\EventViewModel.cs" />
+    <Compile Include="ViewModels\VotingViewModel.cs" />
     <Compile Include="Views\EventListView.xaml.cs">
       <DependentUpon>EventListView.xaml</DependentUpon>
     </Compile>
@@ -211,6 +212,9 @@
     <Resource Include="Icons\event-new.png" />
     <Resource Include="Icons\event-open.png" />
     <EmbeddedResource Include="Database\Schema.sql" />
+    <None Include="Database\readme.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <Content Include="DataModel.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <DependentUpon>DataModel.edmx</DependentUpon>

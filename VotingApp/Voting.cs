@@ -15,9 +15,9 @@ namespace EventVoting.VotingApp
     public partial class Voting
     {
         public long Id { get; private set; }
-        public string Name { get; set; }
+        public long IdEvent { get; set; }
         public Nullable<System.DateTime> Start { get; set; }
         public Nullable<System.DateTime> End { get; set; }
-        public Nullable<long> IdEvent { get; set; }
+        public string Name { get; set; }
     }
 }
