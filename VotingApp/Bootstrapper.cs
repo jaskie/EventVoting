@@ -16,6 +16,8 @@ namespace EventVoting.VotingApp
         public Bootstrapper()
         {
             Initialize();
+            if (!(Application.Current is App)) // in design mode
+                return;
             FrameworkElement.LanguageProperty.OverrideMetadata(
               typeof(FrameworkElement),
               new FrameworkPropertyMetadata(

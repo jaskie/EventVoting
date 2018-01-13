@@ -1,17 +1,11 @@
 ﻿using Caliburn.Micro;
-using System;
-using System.Collections.Generic;
-using System.Dynamic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
 
 namespace EventVoting.VotingApp.ViewModels
 {
     public class MainViewModel : Screen
     {
         private EventViewModel _selectedEvent;
+        private PropertyChangedBase _selectedScreen;
         private readonly IWindowManager _windowManager;
         private static readonly string WindowTitle = "Voting controller";
 
@@ -19,11 +13,6 @@ namespace EventVoting.VotingApp.ViewModels
         {
             _windowManager = windowManager;
             DisplayName = WindowTitle;
-            using (var context = IoC.Get<VotingDbContext>())
-            {
-                context.Appliance.Add(new Appliance { DeviceId = Guid.NewGuid().ToByteArray() });
-                context.SaveChanges();
-            }
         }
 
         public void EventCreate()
@@ -54,12 +43,41 @@ namespace EventVoting.VotingApp.ViewModels
             SelectedEvent = null;
         }
 
+        public void EventShow()
+        {
+            SelectedScreen = SelectedEvent;
+        }
+
+        public void DeviceList()
+        {
+            SelectedScreen = new DeviceListViewModel();
+        }
+
         public bool CanEventCreate => SelectedEvent == null;
 
         public bool CanEventSelect => SelectedEvent == null;
 
         public bool CanEventClose => SelectedEvent != null;
 
+        public bool CanEventShow => SelectedEvent != null && SelectedScreen != SelectedEvent;
+
+        public bool CanDeviceList => !(SelectedScreen is DeviceListViewModel);
+
+
+        public PropertyChangedBase SelectedScreen
+        {
+            get => _selectedScreen;
+            set
+            {
+                if (_selectedScreen == value)
+                    return;
+                (_selectedScreen as DeviceListViewModel)?.Dispose();
+                _selectedScreen = value;
+                NotifyOfPropertyChange();
+                NotifyOfPropertyChange(nameof(CanEventShow));
+                NotifyOfPropertyChange(nameof(CanDeviceList));
+            }
+        }
 
         public EventViewModel SelectedEvent
         {
@@ -75,6 +93,8 @@ namespace EventVoting.VotingApp.ViewModels
                 NotifyOfPropertyChange(nameof(CanEventClose));
                 NotifyOfPropertyChange(nameof(CanEventCreate));
                 NotifyOfPropertyChange(nameof(CanEventSelect));
+                if (value != null || SelectedScreen is EventViewModel)
+                    SelectedScreen = value;
             }
         }
 

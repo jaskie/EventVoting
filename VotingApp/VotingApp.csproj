@@ -97,10 +97,13 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Appliance.cs">
+    <Compile Include="Device.cs">
       <DependentUpon>DataModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="Model\ApplianceTypeEnum.cs" />
+    <Compile Include="EventDevice.cs">
+      <DependentUpon>DataModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Model\DeviceTypeEnum.cs" />
     <Compile Include="Database\DatabaseInitializer.cs" />
     <Compile Include="DataModel.cs">
       <AutoGen>True</AutoGen>
@@ -110,11 +113,16 @@
     <Compile Include="Event.cs">
       <DependentUpon>DataModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="ViewModels\DeviceListViewModel.cs" />
+    <Compile Include="ViewModels\DeviceViewModel.cs" />
     <Compile Include="ViewModels\EventListViewModel.cs" />
     <Compile Include="ViewModels\VotingPropertiesViewModel.cs" />
     <Compile Include="ViewModels\EventPropertiesViewModel.cs" />
     <Compile Include="ViewModels\EventViewModel.cs" />
     <Compile Include="ViewModels\VotingViewModel.cs" />
+    <Compile Include="Views\DeviceListView.xaml.cs">
+      <DependentUpon>DeviceListView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\EventListView.xaml.cs">
       <DependentUpon>EventListView.xaml</DependentUpon>
     </Compile>
@@ -127,12 +135,19 @@
     <Compile Include="Views\EventView.xaml.cs">
       <DependentUpon>EventView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\VotingView.xaml.cs">
+      <DependentUpon>VotingView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Vote.cs">
       <DependentUpon>DataModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Voting.cs">
       <DependentUpon>DataModel.tt</DependentUpon>
     </Compile>
+    <Page Include="Views\DeviceListView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\EventListView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -169,6 +184,10 @@
       <DependentUpon>DataModel.edmx</DependentUpon>
     </Compile>
     <Compile Include="ViewModels\MainViewModel.cs" />
+    <Page Include="Views\VotingView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs">
@@ -205,6 +224,9 @@
     <AppDesigner Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
+    <Resource Include="Icons\device-delete.png" />
+    <Resource Include="Icons\device.png" />
+    <Resource Include="Icons\event-view.png" />
     <Resource Include="Icons\voting-stop.png" />
     <Resource Include="Icons\voting-start.png" />
     <Resource Include="Icons\voting-new.png" />

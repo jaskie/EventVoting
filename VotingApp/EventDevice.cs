@@ -12,10 +12,9 @@ namespace EventVoting.VotingApp
     using System;
     using System.Collections.Generic;
     
-    public partial class Appliance
+    public partial class EventDevice
     {
-        public long Id { get; private set; }
-        public int Type { get; set; }
-        public byte[] DeviceId { get; set; }
+        public long IdEvent { get; set; }
+        public long IdDevice { get; set; }
     }
 }

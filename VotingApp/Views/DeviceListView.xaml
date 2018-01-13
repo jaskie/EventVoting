@@ -1,0 +1,26 @@
+﻿<UserControl x:Class="EventVoting.VotingApp.Views.DeviceListView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:vm="clr-namespace:EventVoting.VotingApp.ViewModels"
+             mc:Ignorable="d" 
+             d:DataContext="{d:DesignInstance vm:DeviceListViewModel}"
+             d:DesignHeight="300" d:DesignWidth="300">
+    <DockPanel>
+        <ToolBar DockPanel.Dock="Top" Height="32" ToolBarTray.IsLocked="True" >
+            <ToolBarPanel Orientation="Horizontal">
+                <Button x:Name="NewDevice" Content="{StaticResource DeviceNewIcon}" ToolTip="Register new device"/>
+                <Button x:Name="DeleteDevice" Content="{StaticResource DeviceDeleteIcon}" ToolTip="Delete selected device"/>
+            </ToolBarPanel>
+        </ToolBar>
+        <TextBlock Text="Device list" Style="{StaticResource TableHeaderTextBlock}"/>
+        <DataGrid x:Name="Devices" IsReadOnly="True" CanUserAddRows="False" CanUserDeleteRows="False" 
+                      AutoGenerateColumns="False">
+            <DataGrid.Columns>
+                <DataGridTextColumn Binding="{Binding DeviceId}"/>
+            </DataGrid.Columns>
+        </DataGrid>
+            
+    </DockPanel>
+</UserControl>

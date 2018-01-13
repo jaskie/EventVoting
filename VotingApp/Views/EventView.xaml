@@ -2,14 +2,16 @@
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:cal="http://www.caliburnproject.org"
              xmlns:vm="clr-namespace:EventVoting.VotingApp.ViewModels"
+             xmlns:views="clr-namespace:EventVoting.VotingApp.Views"
              mc:Ignorable="d" 
              d:DataContext="{d:DesignInstance vm:EventViewModel}"
              d:DesignHeight="800" d:DesignWidth="1000">
     <DockPanel>
-        <ToolBar DockPanel.Dock="Top" Height="32" >
-            <ToolBarPanel Orientation="Horizontal">
+        <ToolBar ToolBarTray.IsLocked="True" DockPanel.Dock="Top" Height="32">
+            <ToolBarPanel Orientation="Horizontal" >
                 <Button x:Name="NewVoting" Content="{StaticResource VotingNewIcon}" ToolTip="Add new voting"/>
                 <Separator Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}" />
                 <Button x:Name="StartVoting" Content="{StaticResource VotingStartIcon}" ToolTip="Start collecting votes for selected voting"/>
@@ -21,13 +23,21 @@
                 <ColumnDefinition/>
                 <ColumnDefinition/>
             </Grid.ColumnDefinitions>
-            <DataGrid ItemsSource="{Binding Votings}" SelectedItem="{Binding SelectedVoting}" CanUserAddRows="False" CanUserDeleteRows="False" AutoGenerateColumns="False">
-                <DataGrid.Columns>
-                    <DataGridTextColumn Header="Title" Binding="{Binding Name}" Width="*"/>
-                    <DataGridTextColumn Header="Started" Binding="{Binding Start}"/>
-                    <DataGridTextColumn Header="Finished" Binding="{Binding End}"/>
-                </DataGrid.Columns>
-            </DataGrid>           
+            <DockPanel>
+                <TextBlock Text="Voting list" Style="{StaticResource TableHeaderTextBlock}" />
+                <DataGrid ItemsSource="{Binding Votings}" 
+                      SelectedItem="{Binding SelectedVoting}" 
+                      IsReadOnly="True" CanUserAddRows="False" CanUserDeleteRows="False" 
+                      AutoGenerateColumns="False">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="Title" Binding="{Binding Name}" Width="*"/>
+                        <DataGridTextColumn Header="Started" Binding="{Binding Start}" Width="120"/>
+                        <DataGridTextColumn Header="Finished" Binding="{Binding End}" Width="120"/>
+                    </DataGrid.Columns>
+                </DataGrid>
+            </DockPanel>
+            <GridSplitter HorizontalAlignment="Right" Width="3" BorderThickness="1" BorderBrush="DimGray" Background="#FF1E3A47"/>
+            <ContentControl Grid.Column="1" x:Name="SelectedVoting" />
         </Grid>        
     </DockPanel>
 </UserControl>

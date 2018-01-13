@@ -43,8 +43,7 @@ namespace EventVoting.VotingApp.ViewModels
             var voting = new Voting { Name = "New voting", IdEvent = Event.Id };
             if (_windowManager.ShowDialog(new VotingPropertiesViewModel(voting)) == true)
             {
-                _db.Voting.Attach(voting);
-                _db.Entry(voting).State = EntityState.Added;
+                _db.Voting.Add(voting);
                 _db.SaveChanges();
                 var vm = new VotingViewModel(voting);
                 Votings.Add(vm);
@@ -65,8 +64,6 @@ namespace EventVoting.VotingApp.ViewModels
         {
             _votingInProgress.End = DateTime.Now;
             var voting = _votingInProgress.Voting;
-            _db.Voting.Attach(voting);
-            _db.Entry(voting).State = EntityState.Modified;
             _db.SaveChanges();
             VotingInProgress = null;
         }

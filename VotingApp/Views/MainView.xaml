@@ -11,8 +11,10 @@
                 <MenuItem x:Name="EventCreate" Header="Create new" Icon="{StaticResource EventNewIcon}"/>
                 <MenuItem x:Name="EventSelect"  Header="Select existing" Icon="{StaticResource EventOpenIcon}"/>
                 <MenuItem x:Name="EventClose"  Header="Close event" Icon="{StaticResource EventCloseIcon}"/>
+                <MenuItem x:Name="EventShow" Header="Show open event" Icon="{StaticResource EventViewIcon}"/>
             </MenuItem>
+            <MenuItem x:Name="DeviceList" Header="Devices"/>
         </Menu>
-        <ContentControl x:Name="SelectedEvent"/>
+        <ContentControl x:Name="SelectedScreen"/>
     </DockPanel>
 </Window>

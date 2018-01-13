@@ -2,21 +2,18 @@
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace EventVoting.VotingApp.ViewModels
 {
     public class EventListViewModel : Screen, IDisposable
     {
         private Event _selectedEvent;
-        private readonly VotingDbContext _votingDbContext;
+        private readonly VotingDbContext _db;
 
         public EventListViewModel()
         {
-            _votingDbContext = IoC.Get<VotingDbContext>();
-            _votingDbContext.Event.Load();
+            _db = IoC.Get<VotingDbContext>();
+            _db.Event.Load();
         }
 
         public Event SelectedEvent
@@ -32,7 +29,7 @@ namespace EventVoting.VotingApp.ViewModels
             }
         }
 
-        public IEnumerable<Event> Events => _votingDbContext.Event.Local;
+        public IEnumerable<Event> Events => _db.Event.Local;
 
 
         public bool CanOk => SelectedEvent != null;
@@ -45,7 +42,7 @@ namespace EventVoting.VotingApp.ViewModels
         {
             if (IoC.Get<IWindowManager>().ShowDialog(new EventPropertiesViewModel(@event)) == true)
             {
-                _votingDbContext.SaveChanges();
+                _db.SaveChanges();
             }
         }
 
@@ -58,7 +55,7 @@ namespace EventVoting.VotingApp.ViewModels
             {
                 if (disposing)
                 {
-                    _votingDbContext.Dispose();
+                    _db.Dispose();
                 }
                 disposedValue = true;
             }

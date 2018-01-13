@@ -1,6 +1,6 @@
 ﻿namespace EventVoting.VotingApp.Model
 {
-    public enum ApplianceTypeEnum
+    public enum DeviceTypeEnum
     {
         LoRaRemote,
     }

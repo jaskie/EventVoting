@@ -26,9 +26,10 @@ namespace EventVoting.VotingApp
             throw new UnintentionalCodeFirstException();
         }
     
-        public virtual DbSet<Appliance> Appliance { get; set; }
         public virtual DbSet<Vote> Vote { get; set; }
         public virtual DbSet<Event> Event { get; set; }
         public virtual DbSet<Voting> Voting { get; set; }
+        public virtual DbSet<Device> Device { get; set; }
+        public virtual DbSet<EventDevice> EventDevice { get; set; }
     }
 }
