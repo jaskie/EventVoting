@@ -9,35 +9,36 @@ namespace EventVoting.VotingApp.ViewModels
 {
     public class VotingViewModel: PropertyChangedBase
     {
-        private readonly Voting _voting;
-
+        
         public VotingViewModel(Voting voting)
         {
-            _voting = voting;
+            Voting = voting;
         }
 
-        public string Name => _voting.Name;
+        public Voting Voting { get; }
+
+        public string Name => Voting.Name;
 
         public DateTime? Start
         {
-            get => _voting.Start;
+            get => Voting.Start;
             set
             {
-                if (_voting.Start == value)
+                if (Voting.Start == value)
                     return;
-                _voting.Start = value;
+                Voting.Start = value;
                 NotifyOfPropertyChange();
             }
         }
 
         public DateTime? End
         {
-            get => _voting.End;
+            get => Voting.End;
             set
             {
-                if (_voting.End == value)
+                if (Voting.End == value)
                     return;
-                _voting.End = value;
+                Voting.End = value;
                 NotifyOfPropertyChange();
             }
         }

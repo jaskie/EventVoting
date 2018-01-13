@@ -9,6 +9,8 @@
         <EntityTypeShape EntityType="DomainModel.Vote" Width="1.5" PointX="7.375" PointY="0.75" IsExpanded="true" />
         <EntityTypeShape EntityType="DomainModel.Event" Width="1.5" PointX="2.75" PointY="0.75" />
         <EntityTypeShape EntityType="DomainModel.Voting" Width="1.5" PointX="5.125" PointY="0.75" />
+        <AssociationConnector Association="DomainModel.EventVoting" />
+        <AssociationConnector Association="DomainModel.VotingVote" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

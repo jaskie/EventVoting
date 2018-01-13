@@ -3,7 +3,9 @@ using EventVoting.VotingApp.Database;
 using EventVoting.VotingApp.ViewModels;
 using System;
 using System.Collections.Generic;
+using System.Threading;
 using System.Windows;
+using System.Windows.Markup;
 
 namespace EventVoting.VotingApp
 {
@@ -14,6 +16,10 @@ namespace EventVoting.VotingApp
         public Bootstrapper()
         {
             Initialize();
+            FrameworkElement.LanguageProperty.OverrideMetadata(
+              typeof(FrameworkElement),
+              new FrameworkPropertyMetadata(
+                  XmlLanguage.GetLanguage(Thread.CurrentThread.CurrentCulture.Name)));
         }
 
         protected override void OnStartup(object sender, StartupEventArgs e)

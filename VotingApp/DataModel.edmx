@@ -71,6 +71,14 @@
           <EntitySet Name="Vote" EntityType="Self.Vote" />
           <EntitySet Name="Event" EntityType="DomainModel.Event" />
           <EntitySet Name="Voting" EntityType="DomainModel.Voting" />
+          <AssociationSet Name="EventVoting" Association="DomainModel.EventVoting">
+            <End Role="Event" EntitySet="Event" />
+            <End Role="Voting" EntitySet="Voting" />
+          </AssociationSet>
+          <AssociationSet Name="VotingVote" Association="DomainModel.VotingVote">
+            <End Role="Voting" EntitySet="Voting" />
+            <End Role="Vote" EntitySet="Vote" />
+          </AssociationSet>
         </EntityContainer>
         <EntityType Name="Event">
           <Key>
@@ -89,6 +97,30 @@
           <Property Name="End" Type="DateTime" />
           <Property Name="Name" Type="String" MaxLength="2147483647" FixedLength="false" Unicode="true" />
         </EntityType>
+        <Association Name="EventVoting">
+          <End Type="DomainModel.Event" Role="Event" Multiplicity="1" />
+          <End Type="DomainModel.Voting" Role="Voting" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Event">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Voting">
+              <PropertyRef Name="IdEvent" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="VotingVote">
+          <End Type="DomainModel.Voting" Role="Voting" Multiplicity="1" />
+          <End Type="DomainModel.Vote" Role="Vote" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Voting">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Vote">
+              <PropertyRef Name="IdVoting" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->

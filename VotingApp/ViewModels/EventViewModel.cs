@@ -64,6 +64,9 @@ namespace EventVoting.VotingApp.ViewModels
         public void StopVoting()
         {
             _votingInProgress.End = DateTime.Now;
+            var voting = _votingInProgress.Voting;
+            _db.Voting.Attach(voting);
+            _db.Entry(voting).State = EntityState.Modified;
             _db.SaveChanges();
             VotingInProgress = null;
         }
