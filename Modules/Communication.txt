@@ -1,0 +1,51 @@
+This file describes communication between master (a PC transceiver) and remote keypad devices. Message type Id's for query and for response are the same.
+
+Communication is allways initiated by master as broadcast, then responses may be send by individual keypads, and confirmation receipts are send to particular keypads. 
+Keypads, if no receipt received, should retry tansmission after random time of channel idle, until time-out.
+
+Maximum allowed message content size is 255 bytes.
+
+There are following packet types:
+0x01: RegisteredDevices
+All operational keypad devices should respond with their Id's
+0x02: NewDevice
+The message allows register of single device. Master sends a new device Id as content, and display its CRC, which should be entered on keypad. 
+This Id will persist in device and will be used in subsequent communication, and confirmation is send to master as usual.
+Keypads with non-zero Id's should not respond.
+0x03: DropDevice
+This message drops (zeroes) Id of device after confirmation on keypad. The response is however send with deleted Id.
+0x04: StartVoting
+Enables voting mode for all devices. After enabled, until EndVoting, devices sends keypad numbers. 
+The sending retries with the same number until keypad number changed or transmission confirmed.
+The content is displayed on device's screens
+0x05: EndVoting
+Finishes voting mode for all devices.
+The content is displayed on devices screens
+0x06: Display
+Only displays text on devices screens
+
+Broadcast (initiating the communication) packet structure is as follows:
+byte index		length		meaning
+0				1			SOH (0x1)
+1				1			Packet type
+2				1			Content length
+4+				length		The content
+last-1			2			Packet CRC (from byte index 1 until this)
+
+Keypad responses
+byte index		length		meaning
+0				1			SOH (0x1)
+1				1			Packet type || 0x80
+2				16			Sender Id
+18				2			Message Id
+20				1			Response length
+21				length		The response
+last-1			2			Packet CRC
+
+Confirmations (send by master to specified keypad)
+byte index		length		meaning
+0				1			SOH (0x1)
+1				1			Packet type || 0xC0
+2				16			Receiver Id
+18				2			confirmed message Id
+20				2			Packet CRC

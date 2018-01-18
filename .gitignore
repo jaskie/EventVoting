@@ -2,3 +2,9 @@
 /VotingApp/bin/
 /VotingApp/obj/
 /packages/
+/Modules/Keypad/Debug
+/Modules/Keypad/__vm
+/Modules/Keypad/Keypad.sln
+/Modules/Keypad/Keypad.vcxproj
+/Modules/Keypad/*.filters
+/Modules/Keypad/.vs/Keypad/v14/*.suo

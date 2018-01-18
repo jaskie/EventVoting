@@ -1,0 +1,19 @@
+Module: Arduino Mini Pro on Atmega328P.
+Connection list:
+LCD (Nokia 5110 using PCD8544):
+- SPI CLK: D13
+- SPI MOSI: D11
+- CS (CE): D7
+- DC: D6
+- RST: D8
+
+Ra-02 (Semtech SX1278):
+- SPI MISO: D12
+- SPI MOSI: D11
+- SPI CLK: D13
+- DI0: D2
+- RST: D9
+- CS (SS): D10
+
+Keypad:
+1-4: D13-D17

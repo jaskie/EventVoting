@@ -1,0 +1,9 @@
+Module: Arduino Mini Pro on Atmega328P.
+Connection list:
+Ra-02 (Semtech SX1278):
+- SPI MISO: D12
+- SPI MOSI: D11
+- SPI CLK: D13
+- DI0: D2
+- RST: D9
+- CS (SS): D10
