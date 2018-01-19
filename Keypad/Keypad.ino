@@ -12,17 +12,19 @@ U8G2_PCD8544_84X48_F_4W_HW_SPI u8g2(U8G2_R0, /* cs=*/ 7, /* dc=*/ 6, /* reset=*/
 void setup(void) {
   Serial.begin(9600);                   // initialize serial
   while (!Serial);
-  Serial.println("Keypad");
+  Serial.println("Keypad initializing");
 
   u8g2.begin();
   u8g2.enableUTF8Print();		// enable UTF8 support for the Arduino print() function
-  Serial.println("LoRa init succeeded.");
   for (size_t x = 0; x < BUTTON_COUNT; x++)
   {
 	  pinMode(buttonPins[x], INPUT_PULLUP);
 	  buttonStates[x] = digitalRead(buttonPins[x]);
   }
+  LoRaVoting.init();
   LoRaVoting.ReceivedBroadcastCallback(onReceiveBroadcast);
+  if (LoRaVoting.IsReady())
+	Serial.println("LoRaVoting ready");
 }
 
 void loop(void) {
@@ -41,6 +43,12 @@ void loop(void) {
 
 void onReceiveBroadcast(BroadcastMessage *message) {
 
+	Serial.print("Received: ");
+	for (size_t i = 0; i < message->GetContentLength(); i++)
+	{
+		Serial.print((char)message->GetContent()[i]);
+	}
+	Serial.println();
 	delete message;
   /*
   if (incomingLength != incoming.length()) {   // check length for error

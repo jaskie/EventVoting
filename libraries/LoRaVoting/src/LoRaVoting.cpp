@@ -27,9 +27,9 @@ LoRaVotingClass::~LoRaVotingClass()
 void LoRaVotingClass::init()
 {
 	LoRa.setPins(PIN_CS, PIN_RESET, PIN_IRQ);// set CS, reset, IRQ pin
-	LoRa.begin(FREQUENCY);             // initialize ratio 
-	LoRa.receive();
+	_isReady = LoRa.begin(FREQUENCY);             // initialize ratio 
 	LoRa.onReceive(LoRaVotingClass::onReceive);
+	LoRa.receive();
 }
 
 void LoRaVotingClass::SendMessage(BroadcastMessage & message)
@@ -54,6 +54,11 @@ void LoRaVotingClass::SendMessage(BroadcastMessage & message)
 void LoRaVotingClass::ReceivedBroadcastCallback(void(*callback)(BroadcastMessage *message))
 {
 	_receivedBroadcastCallback = callback;
+}
+
+bool LoRaVotingClass::IsReady()
+{
+	return _isReady;
 }
 
 void LoRaVotingClass::handleReceive(int packetSize)

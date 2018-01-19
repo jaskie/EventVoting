@@ -17,6 +17,7 @@ Module supporting radio communication
 class LoRaVotingClass
 {
 private:
+	bool _isReady;
 	uint8_t* _messageBuffer;
 	size_t _messageBufferPos;
 	void handleReceive(int packetSize);
@@ -31,6 +32,7 @@ private:
 	 LoRaVotingClass();
 	 ~LoRaVotingClass();
 	 void init();
+	 bool IsReady();
 	 void SendMessage(BroadcastMessage& message);
 	 void ReceivedBroadcastCallback(void(*callback)(BroadcastMessage* message));
 
