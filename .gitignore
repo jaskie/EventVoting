@@ -2,9 +2,9 @@
 /VotingApp/bin/
 /VotingApp/obj/
 /packages/
-/Modules/Debug
-/Modules/__vm
 .suo
-/Modules/*.filters
-/Modules/Keypad.vcxproj
-/Modules/Modules.sln
+/Keypad/Debug
+/Transceiver/Debug
+/Keypad/__vm
+/Transceiver/__vm
+*.filters
