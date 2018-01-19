@@ -22,14 +22,18 @@ private:
 	void handleReceive(int packetSize);
 	static void onReceive(int packetSize);
 	bool isPacketReady();
+	bool isValidMessageType(byte messageType);
 	void discardBuffer();
 	void parseMessage();
+	void(*_receivedBroadcastCallback)(BroadcastMessage* message);
 
  public:
 	 RadioClass();
 	 ~RadioClass();
 	 void init();
-	 RadioMessage readMessage();
+	 void SendMessage(BroadcastMessage& message);
+	 void ReceivedBroadcastCallback(void(*callback)(BroadcastMessage* message));
+
 };
 
 extern RadioClass Radio;

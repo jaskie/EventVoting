@@ -25,7 +25,7 @@ The content is displayed on devices screens
 Only displays text on devices screens
 
 Broadcast (initiating the communication) packet structure is as follows:
-byte index		length		meaning
+byte index		size		meaning
 0				1			SOH (0x1)
 1				1			Packet type
 2				1			Content length
@@ -33,7 +33,7 @@ byte index		length		meaning
 last-1			2			Packet CRC (from byte index 1 until this)
 
 Keypad responses
-byte index		length		meaning
+byte index		size		meaning
 0				1			SOH (0x1)
 1				1			Packet type || 0x80
 2				16			Sender Id
@@ -43,7 +43,7 @@ byte index		length		meaning
 last-1			2			Packet CRC
 
 Confirmations (send by master to specified keypad)
-byte index		length		meaning
+byte index		size		meaning
 0				1			SOH (0x1)
 1				1			Packet type || 0xC0
 2				16			Receiver Id

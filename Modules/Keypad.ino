@@ -4,8 +4,10 @@
 #include <U8g2lib.h>
 #include "Radio.h"
 
-const int buttonPins[] = { 14, 15, 16, 17};
-bool buttonStates[4];
+#define BUTTON_COUNT 4
+
+const int buttonPins[BUTTON_COUNT] = { 14, 15, 16, 17};
+bool buttonStates[BUTTON_COUNT];
 
 U8G2_PCD8544_84X48_F_4W_HW_SPI u8g2(U8G2_R0, /* cs=*/ 7, /* dc=*/ 6, /* reset=*/ 8);  // Nokia 5110 Display
 
@@ -17,15 +19,16 @@ void setup(void) {
   u8g2.begin();
   u8g2.enableUTF8Print();		// enable UTF8 support for the Arduino print() function
   Serial.println("LoRa init succeeded.");
-  for (int x = 0; x < sizeof(buttonPins); x++)
+  for (size_t x = 0; x < BUTTON_COUNT; x++)
   {
 	  pinMode(buttonPins[x], INPUT_PULLUP);
 	  buttonStates[x] = digitalRead(buttonPins[x]);
   }
+  Radio.ReceivedBroadcastCallback(onReceiveBroadcast);
 }
 
 void loop(void) {
-	for (int x = 0; x < sizeof(buttonPins); x++)
+	for (size_t x = 0; x < BUTTON_COUNT; x++)
 	{
 		bool newState = digitalRead(buttonPins[x]);
 		if (newState != buttonStates[x])
@@ -38,8 +41,9 @@ void loop(void) {
 }
 
 
-void onReceive(int packetSize) {
+void onReceiveBroadcast(BroadcastMessage *message) {
 
+	delete message;
   /*
   if (incomingLength != incoming.length()) {   // check length for error
     Serial.println("error: message length does not match length");
