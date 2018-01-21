@@ -27,4 +27,6 @@ void onReceiveResponse(const ResponseMessage& message)
 	Serial.print(" from ");
 	Serial.print((char*)message.GetSenderId());
 	Serial.println();
+	ConfirmationMessage confirmation { message.GetType(), message.GetSenderId(), message.GetMessageId() };
+	LoRaVoting.SendMessage(confirmation);
 }

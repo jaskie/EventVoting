@@ -25,34 +25,30 @@ void LoRaVotingClass::init()
 void LoRaVotingClass::SendMessage(const BroadcastMessage& message)
 {
 	String content = message.GetContent();
-	size_t contentSize = content.length() + 1;
+	size_t contentSize = content.length() + 1u;
 	byte contentBytes[contentSize];
 	content.getBytes(contentBytes, contentSize);
 	byte packet[contentSize + 2];
 	packet[0] = message.GetType();
 	packet[1] = (byte)contentSize;
-	memcpy(packet + 2, contentBytes, contentSize);
-	uint16_t crc = 0;
-	for (byte i = 0; i < contentSize + 2; i++)
+	memcpy(packet + 2u, contentBytes, contentSize);
+	uint16_t crc = 0u;
+	for (byte i = 0u; i < contentSize + 2u; i++)
 		crc += packet[i];
 	LoRa.beginPacket();
 	LoRa.write(SOH);
-	LoRa.write(packet, contentSize + 2);
+	LoRa.write(packet, contentSize + 2u);
 	LoRa.write(lowByte(crc));
 	LoRa.write(highByte(crc));
 	LoRa.endPacket();
 	LoRa.receive();
-	Serial.print("sended BroadcastMessage crc: ");
-	Serial.println(crc);
 }
 
 void LoRaVotingClass::SendMessage(const ResponseMessage& message)
 {
-	Serial.println("preparing packet");
-
-	size_t packetSize = message.GetContentLength() + DEVICE_ID_LENGTH + 4;
+	size_t packetSize = message.GetContentLength() + DEVICE_ID_LENGTH + 4u;
 	byte packet[packetSize];
-	size_t packetPos = 0;
+	size_t packetPos = 0u;
 	packet[packetPos++] = message.GetType() | RESPONSE;
 	memcpy(packet + packetPos, message.GetSenderId(), DEVICE_ID_LENGTH);
 	packetPos += DEVICE_ID_LENGTH;
@@ -70,11 +66,30 @@ void LoRaVotingClass::SendMessage(const ResponseMessage& message)
 	LoRa.write(highByte(crc));
 	LoRa.endPacket();
 	LoRa.receive();
-	Serial.println("packet sent");
-	Serial.print("sended ResponseMessage crc: ");
-	Serial.println(crc);
-
 }
+
+void LoRaVotingClass::SendMessage(const ConfirmationMessage& message)
+{
+	size_t packetSize = DEVICE_ID_LENGTH + 3u;
+	byte packet[packetSize];
+	size_t packetPos = 0;
+	packet[packetPos++] = message.GetType() | CONFIRMATION;
+	memcpy(packet + packetPos, message.GetReceiverId(), DEVICE_ID_LENGTH);
+	packetPos += DEVICE_ID_LENGTH;
+	packet[packetPos++] = lowByte(message.GetMessageId());
+	packet[packetPos++] = highByte(message.GetMessageId());
+	uint16_t crc = 0;
+	for (packetPos = 0; packetPos < packetSize; packetPos++)
+		crc += packet[packetPos];
+	LoRa.beginPacket();
+	LoRa.write(SOH);
+	LoRa.write(packet, packetSize);
+	LoRa.write(lowByte(crc));
+	LoRa.write(highByte(crc));
+	LoRa.endPacket();
+	LoRa.receive();
+}
+
 
 void LoRaVotingClass::ReceivedBroadcastCallback(void(*callback)(const BroadcastMessage& message))
 {
@@ -86,6 +101,10 @@ void LoRaVotingClass::ReceivedResponseCallback(void(*callback)(const ResponseMes
 	_receivedResponseCallback = callback;
 }
 
+void LoRaVotingClass::ReceivedConfirmationCallback(void(*callback)(const ConfirmationMessage& message))
+{
+	_receivedConfirmationCallback = callback;
+}
 
 bool LoRaVotingClass::IsReady()
 {
@@ -96,8 +115,6 @@ void LoRaVotingClass::handleReceive(int packetSize)
 {
 	if (packetSize == 0)
 		return;
-	Serial.print("packet received, bufferPos: ");
-	Serial.println(_messageBufferPos);
 	do
 	{
 		if (_messageBufferPos >= BUFFER_SIZE - 1)
@@ -110,8 +127,6 @@ void LoRaVotingClass::handleReceive(int packetSize)
 			_messageBuffer[_messageBufferPos++] = (byte)received;
 			if (isPacketReady())
 			{
-				Serial.print("packet ready, MessageType: ");
-				Serial.println(_messageBuffer[1]);
 				parseMessage();
 				discardBuffer();
 			}
@@ -130,7 +145,7 @@ bool LoRaVotingClass::isPacketReady()
 		return false;
 	if ((_messageBuffer[1] & CONFIRMATION) == CONFIRMATION) // confirmation message
 	{
-		return _messageBufferPos >= 23U;
+		return _messageBufferPos >= DEVICE_ID_LENGTH + 6U;
 	}
 	else if ((_messageBuffer[1] & RESPONSE) == RESPONSE)
 	{
@@ -188,18 +203,18 @@ void LoRaVotingClass::discardBuffer()
 
 void LoRaVotingClass::parseMessage()
 {
-	Serial.print("buffer pos: ");
-	Serial.println(_messageBufferPos);
-
 	if (_messageBufferPos < 6)
 		return;
 	if (((_messageBuffer[1] & CONFIRMATION) == CONFIRMATION)
-		&& (_messageBufferPos >= 23)) // confirmation message
+		&& (_messageBufferPos >= DEVICE_ID_LENGTH + 6U)) // confirmation message
 	{
-		byte messageType = _messageBuffer[1] & ~CONFIRMATION;
-		if (!(isValidMessageType(messageType)) || !isValidCRC())
+		if (!(isValidMessageType(_messageBuffer[1] & ~CONFIRMATION)) || !isValidCRC())
 			return;
-
+		if (_receivedConfirmationCallback)
+		{
+			ConfirmationMessage message((MessageType)(_messageBuffer[1] & ~CONFIRMATION), _messageBuffer + 2, _messageBuffer[18] | (_messageBuffer[19] << 8));
+			_receivedConfirmationCallback(message);
+		}
 	}
 	else if ((_messageBuffer[1] & RESPONSE) == RESPONSE)
 	{

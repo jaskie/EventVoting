@@ -7,6 +7,8 @@
 const int buttonPins[BUTTON_COUNT] = { 14, 15, 16, 17};
 bool buttonStates[BUTTON_COUNT];
 const byte deviceId[DEVICE_ID_LENGTH] = { 'A', 'B', 'C', 'D', 'A', 'B', 'C', 'D', 'A', 'B', 'C', 'D', 'A', 'B', 'C', 'D' };
+ResponseMessage * responseToSend = nullptr;
+byte responseRetryCount = 0;
 
 //U8G2_PCD8544_84X48_F_4W_HW_SPI u8g2(U8G2_R0, /* cs=*/ 7, /* dc=*/ 6, /* reset=*/ 8);  // Nokia 5110 Display
 
@@ -24,6 +26,8 @@ void setup(void) {
   }
   LoRaVoting.init();
   LoRaVoting.ReceivedBroadcastCallback(onReceiveBroadcast);
+  LoRaVoting.ReceivedConfirmationCallback(onConfirmation);
+
   if (LoRaVoting.IsReady())
 	Serial.println("LoRaVoting ready");
 }
@@ -38,17 +42,33 @@ void loop(void) {
 			Serial.println("Button " + String(x) + " state changed to " + String(newState));
 		}
 	}
-	delay(100);
+	delay(500);
+	startSendingResponse();
 }
 
 
 void onReceiveBroadcast(const BroadcastMessage& message) {
+	if (responseToSend)
+	{
+		Serial.println("previous response not deleted");
+		delete responseToSend;
+	}
 
-	Serial.print("Received: ");
+	switch (message.GetType())
+	{
+	case RegisteredDevices:
+		replyRegisteredDevices();
+		break;
+	default:
+		break;
+	}
+
+	/*Serial.print("Received: ");
 	Serial.print(message.GetContent());
 	Serial.println();
 	const byte response[]{ 12u, 32u };
-	LoRaVoting.SendMessage(ResponseMessage(message.GetType(), deviceId, response, 2));
+	responseToSend = new ResponseMessage(message.GetType(), deviceId, response, 2);
+	LoRaVoting.SendMessage(*responseToSend);*/
   /*
   if (incomingLength != incoming.length()) {   // check length for error
     Serial.println("error: message length does not match length");
@@ -79,5 +99,32 @@ void onReceiveBroadcast(const BroadcastMessage& message) {
   u8g2.println("Snr: " + String(LoRa.packetSnr()));
   u8g2.sendBuffer();
   */
+}
+
+
+void onConfirmation(const ConfirmationMessage& message) 
+{
+	if (responseToSend && message.IsConfirmationTo(responseToSend->GetType(), responseToSend->GetMessageId(), responseToSend->GetSenderId()))
+	{
+		Serial.println("Received confirmation.");
+		delete(responseToSend);
+		responseToSend = nullptr;
+	}
+}
+
+void startSendingResponse()
+{
+	if (responseToSend)
+	{
+		Serial.println("sending...");
+			LoRaVoting.SendMessage(*responseToSend);
+	}
+}
+
+void replyRegisteredDevices()
+{
+	Serial.println("Started replying.");
+	responseToSend = new ResponseMessage(RegisteredDevices, deviceId, NULL, 0);
+	startSendingResponse();
 }
 

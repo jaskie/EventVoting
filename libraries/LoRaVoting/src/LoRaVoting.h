@@ -32,15 +32,17 @@ private:
 	void parseMessage();
 	void(*_receivedBroadcastCallback)(const BroadcastMessage& message);
 	void(*_receivedResponseCallback)(const ResponseMessage& message);
+	void(*_receivedConfirmationCallback)(const ConfirmationMessage& message);
 
  public:
 	 void init();
 	 bool IsReady();
 	 void SendMessage(const BroadcastMessage& message);
 	 void SendMessage(const ResponseMessage& message);
+	 void SendMessage(const ConfirmationMessage& message);
 	 void ReceivedBroadcastCallback(void(*callback)(const BroadcastMessage& message));
 	 void ReceivedResponseCallback(void(*callback)(const ResponseMessage& message));
-
+	 void ReceivedConfirmationCallback(void(*callback)(const ConfirmationMessage& message));
 };
 
 extern LoRaVotingClass LoRaVoting;

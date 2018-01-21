@@ -20,12 +20,13 @@ String BroadcastMessage::GetContent() const
 	return _content;
 }
 
-ResponseMessage::ResponseMessage(const MessageType type, const byte * senderId, const byte * content, const byte contentLength)
+ResponseMessage::ResponseMessage(const MessageType type, const byte * senderId, const byte * content, const byte contentLength):
+	_messageId(1)
 {
 	_type = type;
 	_content = new byte[contentLength];
 	_contentLength = contentLength;
-	_messageId = 1;// ++_lastMessageid
+	//_messageId = 1;// ++_lastMessageid
 	memcpy(_content, content, contentLength);
 	memcpy(_senderId, senderId, DEVICE_ID_LENGTH);
 }
@@ -41,10 +42,7 @@ uint16_t ResponseMessage::GetMessageId() const
 	return _messageId;
 }
 
-bool ResponseMessage::SenderIdEqual(const byte senderId[DEVICE_ID_LENGTH]) const
-{
-	return memcmp(_senderId, senderId, DEVICE_ID_LENGTH) == 0;
-}
+
 
 byte ResponseMessage::GetContentLength() const
 {
@@ -68,10 +66,24 @@ ConfirmationMessage::ConfirmationMessage(const MessageType messageType, const by
 	memcpy(_receiverId, receiverId, DEVICE_ID_LENGTH);
 }
 
-bool ConfirmationMessage::IsConfirmationTo(ResponseMessage message)
+bool ConfirmationMessage::IsConfirmationTo(const MessageType type, const uint16_t messageId, const byte receiverId[DEVICE_ID_LENGTH]) const
 {
-	return message.GetType() == _type
-		&& message.GetMessageId() == _messageId
-		&& message.SenderIdEqual(_receiverId);
+	return type == _type
+		&& messageId == _messageId
+		&& ReceiverIdEqual(_receiverId);
 }
 
+byte* ConfirmationMessage::GetReceiverId() const
+{
+	return (byte*)_receiverId;
+}
+
+uint16_t ConfirmationMessage::GetMessageId() const
+{
+	return _messageId;
+}
+
+bool ConfirmationMessage::ReceiverIdEqual(const byte receiverId[DEVICE_ID_LENGTH]) const
+{
+	return memcmp(_receiverId, receiverId, DEVICE_ID_LENGTH) == 0;
+}
