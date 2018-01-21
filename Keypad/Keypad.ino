@@ -1,21 +1,21 @@
 #include <LoRaVoting.h>
 #include <Arduino.h>
-#include <U8g2lib.h>
+//#include <U8g2lib.h>
 
 #define BUTTON_COUNT 4
 
 const int buttonPins[BUTTON_COUNT] = { 14, 15, 16, 17};
 bool buttonStates[BUTTON_COUNT];
 
-U8G2_PCD8544_84X48_F_4W_HW_SPI u8g2(U8G2_R0, /* cs=*/ 7, /* dc=*/ 6, /* reset=*/ 8);  // Nokia 5110 Display
+//U8G2_PCD8544_84X48_F_4W_HW_SPI u8g2(U8G2_R0, /* cs=*/ 7, /* dc=*/ 6, /* reset=*/ 8);  // Nokia 5110 Display
 
 void setup(void) {
   Serial.begin(9600);                   // initialize serial
   while (!Serial);
   Serial.println("Keypad initializing");
 
-  u8g2.begin();
-  u8g2.enableUTF8Print();		// enable UTF8 support for the Arduino print() function
+  //u8g2.begin();
+  //u8g2.enableUTF8Print();		// enable UTF8 support for the Arduino print() function
   for (size_t x = 0; x < BUTTON_COUNT; x++)
   {
 	  pinMode(buttonPins[x], INPUT_PULLUP);
@@ -44,10 +44,7 @@ void loop(void) {
 void onReceiveBroadcast(BroadcastMessage *message) {
 
 	Serial.print("Received: ");
-	for (size_t i = 0; i < message->GetContentLength(); i++)
-	{
-		Serial.print((char)message->GetContent()[i]);
-	}
+		Serial.print(message->GetContent());
 	Serial.println();
 	delete message;
   /*

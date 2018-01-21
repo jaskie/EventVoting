@@ -11,7 +11,8 @@
 #define BUFFER_SIZE 0x100
 #define SOH 0x01
 #define CONFIRMATION 0xC0
-#define FREQUENCY 433150000
+#define RESPONSE 0x80
+#define FREQUENCY 433E6
 
 LoRaVotingClass::LoRaVotingClass():
 	_messageBufferPos(0)
@@ -34,21 +35,23 @@ void LoRaVotingClass::init()
 
 void LoRaVotingClass::SendMessage(BroadcastMessage & message)
 {
-	size_t packetSize = message.GetContentLength();
-	byte * packet = new byte[packetSize + 2];
+	String content = message.GetContent();
+	size_t contentSize = content.length() + 1;
+	byte contentBytes[contentSize];
+	content.getBytes(contentBytes, contentSize);
+	byte packet[contentSize + 2];
 	packet[0] = message.GetType();
-	packet[1] = message.GetContentLength();
-	memcpy(packet + 2, message.GetContent(), packetSize * sizeof(byte));
+	packet[1] = (byte)contentSize;
+	memcpy(packet + 2, contentBytes, contentSize * sizeof(byte));
 	uint16_t crc = 0;
-	for (size_t i = 0; i < packetSize; i++)
+	for (size_t i = 0; i < contentSize + 2; i++)
 		crc += packet[i];
 	LoRa.beginPacket();
 	LoRa.write(SOH);
-	LoRa.write(packet, packetSize);
+	LoRa.write(packet, contentSize + 2);
 	LoRa.write(lowByte(crc));
 	LoRa.write(highByte(crc));
 	LoRa.endPacket();
-	delete[] packet;
 }
 
 void LoRaVotingClass::ReceivedBroadcastCallback(void(*callback)(BroadcastMessage *message))
@@ -94,7 +97,7 @@ bool LoRaVotingClass::isPacketReady()
 {
 	if (_messageBufferPos < 6U)
 		return false;
-	if ((_messageBuffer[1] && CONFIRMATION) == CONFIRMATION) // confirmation message
+	if ((_messageBuffer[1] & CONFIRMATION) == CONFIRMATION) // confirmation message
 	{
 		return _messageBufferPos >= 23U;
 	}
@@ -124,19 +127,29 @@ void LoRaVotingClass::parseMessage()
 {
 	if (_messageBufferPos < 6)
 		return;
-	if (((_messageBuffer[1] && CONFIRMATION) == CONFIRMATION)
+	if (((_messageBuffer[1] & CONFIRMATION) == CONFIRMATION)
 		&& (_messageBufferPos >= 23)) // confirmation message
 	{
 		byte messageType = _messageBuffer[1] && !CONFIRMATION;
 		if (!(isValidMessageType(messageType)))
 			return;
 	}
-	if (!(_messageBuffer[1] && CONFIRMATION)
+	if (!(_messageBuffer[1] & (CONFIRMATION | RESPONSE))
 		&& (_messageBufferPos >= 6 + _messageBuffer[2]))
 	{
 		if (!(isValidMessageType(_messageBuffer[1])))
 			return;
+		if (_receivedBroadcastCallback)
+		{
+			byte content[(_messageBuffer[2]) * sizeof(byte)];
+			memcpy(content, _messageBuffer + 3, (_messageBuffer[2]) * sizeof(byte));
+			//Serial.println((char*)content);
 
+			String s((char*)content);
+			BroadcastMessage* message = new BroadcastMessage(_messageBuffer[1], s);
+			_receivedBroadcastCallback(message);
+		}
+		return;
 	}
 }
 

@@ -34,13 +34,10 @@ public:
 class BroadcastMessage : public LoRaVotingMessage
 {
 private:
-	byte* _content;
-	size_t _contentLength;
+	String _content;
 public:
-	BroadcastMessage(const MessageType messageType, const byte content[], const size_t length);
-	virtual ~BroadcastMessage();
-	size_t GetContentLength() const;
-	byte * GetContent();
+	BroadcastMessage(const MessageType messageType, const String& content);
+	String GetContent() const;
 };
 
 // response sent to master controller
