@@ -14,27 +14,32 @@ Module supporting radio communication
 #endif
 #include "LoRaVotingMessage.h"
 
+#define BUFFER_SIZE 0x100
+
+
 class LoRaVotingClass
 {
 private:
 	bool _isReady;
-	uint8_t* _messageBuffer;
-	size_t _messageBufferPos;
+	uint8_t _messageBuffer[BUFFER_SIZE];
+	volatile size_t _messageBufferPos;
 	void handleReceive(int packetSize);
 	static void onReceive(int packetSize);
 	bool isPacketReady();
 	bool isValidMessageType(byte messageType);
+	bool isValidCRC();
 	void discardBuffer();
 	void parseMessage();
-	void(*_receivedBroadcastCallback)(BroadcastMessage* message);
+	void(*_receivedBroadcastCallback)(const BroadcastMessage& message);
+	void(*_receivedResponseCallback)(const ResponseMessage& message);
 
  public:
-	 LoRaVotingClass();
-	 ~LoRaVotingClass();
 	 void init();
 	 bool IsReady();
-	 void SendMessage(BroadcastMessage& message);
-	 void ReceivedBroadcastCallback(void(*callback)(BroadcastMessage* message));
+	 void SendMessage(const BroadcastMessage& message);
+	 void SendMessage(const ResponseMessage& message);
+	 void ReceivedBroadcastCallback(void(*callback)(const BroadcastMessage& message));
+	 void ReceivedResponseCallback(void(*callback)(const ResponseMessage& message));
 
 };
 

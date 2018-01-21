@@ -6,6 +6,7 @@
 
 const int buttonPins[BUTTON_COUNT] = { 14, 15, 16, 17};
 bool buttonStates[BUTTON_COUNT];
+const byte deviceId[DEVICE_ID_LENGTH] = { 'A', 'B', 'C', 'D', 'A', 'B', 'C', 'D', 'A', 'B', 'C', 'D', 'A', 'B', 'C', 'D' };
 
 //U8G2_PCD8544_84X48_F_4W_HW_SPI u8g2(U8G2_R0, /* cs=*/ 7, /* dc=*/ 6, /* reset=*/ 8);  // Nokia 5110 Display
 
@@ -41,12 +42,13 @@ void loop(void) {
 }
 
 
-void onReceiveBroadcast(BroadcastMessage *message) {
+void onReceiveBroadcast(const BroadcastMessage& message) {
 
 	Serial.print("Received: ");
-		Serial.print(message->GetContent());
+	Serial.print(message.GetContent());
 	Serial.println();
-	delete message;
+	const byte response[]{ 12u, 32u };
+	LoRaVoting.SendMessage(ResponseMessage(message.GetType(), deviceId, response, 2));
   /*
   if (incomingLength != incoming.length()) {   // check length for error
     Serial.println("error: message length does not match length");

@@ -9,9 +9,9 @@
 	#include "WProgram.h"
 #endif
 
-#define DEVICE_ID_LENGTH 16
+#define DEVICE_ID_LENGTH 16u
 
-typedef enum MessageType: uint8_t
+typedef enum MessageType: byte
 {
 	Empty,
 	RegisteredDevices,
@@ -44,15 +44,18 @@ public:
 class ResponseMessage : public LoRaVotingMessage
 {
 	byte* _content;
-	size_t _contentLength;
-	byte _receiverId[DEVICE_ID_LENGTH];
+	byte _contentLength;
+	byte _senderId[DEVICE_ID_LENGTH];
 	uint16_t _messageId;
-	static uint16_t _lastMessageid;
+	//static uint16_t _lastMessageid;
 public:
-	ResponseMessage(const BroadcastMessage& question, const byte receiverId[DEVICE_ID_LENGTH], const byte content[], const size_t length);
+	ResponseMessage(const MessageType type, const byte* senderId, const byte* content, const byte contentLength);
 	virtual ~ResponseMessage();
-	uint16_t GetMessageId();
-	bool ReceiverIdEqual(const byte receiverId[DEVICE_ID_LENGTH]);
+	uint16_t GetMessageId() const;
+	byte GetContentLength() const;
+	byte* GetContent() const; 
+	byte* GetSenderId() const;
+	bool SenderIdEqual(const byte senderId[DEVICE_ID_LENGTH]) const;
 };
 
 // a response confirmation sent by master controller

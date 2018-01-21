@@ -8,3 +8,4 @@
 /Keypad/__vm
 /Transceiver/__vm
 *.filters
+/Keypad/*.user
