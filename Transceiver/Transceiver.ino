@@ -12,18 +12,16 @@ void setup() {
 
 void loop() {
   // put your main code here, to run repeatedly:
-	String content("a content example poszedł 23 abc");
-	BroadcastMessage message { RegisteredDevices, content};
-	LoRaVoting.SendMessage(message);
-	delay(2000);
+	LoRaVoting.SendMessage(BroadcastMessage(RegisteredDevices, "asking for registered devices"));
+	//LoRaVoting.SendMessage(BroadcastMessage(NewDevice, "ABCDEFGHIJKLMNOP"));
+	delay(5000);
 }
 
 
 void onReceiveResponse(const ResponseMessage& message) 
 {
 	Serial.print("received response: ");
-	Serial.print(message.GetContent()[0]);
-	Serial.print(message.GetContent()[1]);
+	Serial.print(message.GetType());
 	Serial.print(" from ");
 	Serial.print((char*)message.GetSenderId());
 	Serial.println();

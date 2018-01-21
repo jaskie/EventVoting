@@ -1,21 +1,24 @@
 #include <LoRaVoting.h>
 #include <Arduino.h>
+#include <eeprom.h>
 //#include <U8g2lib.h>
 
 #define BUTTON_COUNT 4
 
 const int buttonPins[BUTTON_COUNT] = { 14, 15, 16, 17};
 bool buttonStates[BUTTON_COUNT];
-const byte deviceId[DEVICE_ID_LENGTH] = { 'A', 'B', 'C', 'D', 'A', 'B', 'C', 'D', 'A', 'B', 'C', 'D', 'A', 'B', 'C', 'D' };
 ResponseMessage * responseToSend = nullptr;
 byte responseRetryCount = 0;
 
 //U8G2_PCD8544_84X48_F_4W_HW_SPI u8g2(U8G2_R0, /* cs=*/ 7, /* dc=*/ 6, /* reset=*/ 8);  // Nokia 5110 Display
 
 void setup(void) {
+
   Serial.begin(9600);                   // initialize serial
   while (!Serial);
   Serial.println("Keypad initializing");
+  
+  EEPROM.begin();
 
   //u8g2.begin();
   //u8g2.enableUTF8Print();		// enable UTF8 support for the Arduino print() function
@@ -43,9 +46,8 @@ void loop(void) {
 		}
 	}
 	delay(500);
-	startSendingResponse();
+	retrySendingResponse();
 }
-
 
 void onReceiveBroadcast(const BroadcastMessage& message) {
 	if (responseToSend)
@@ -53,11 +55,25 @@ void onReceiveBroadcast(const BroadcastMessage& message) {
 		Serial.println("previous response not deleted");
 		delete responseToSend;
 	}
-
+	Serial.print("received type: ");
+	Serial.println(message.GetType());
 	switch (message.GetType())
 	{
 	case RegisteredDevices:
 		replyRegisteredDevices();
+		break;
+	case NewDevice:
+		Serial.println(message.GetContent());
+		newDevice(message.GetContent());
+		break;
+	case DropDevice:
+		clearDeviceId();
+		break;
+	case StartVoting:
+		break;
+	case EndVoting:
+		break;
+	case Display:
 		break;
 	default:
 		break;
@@ -101,6 +117,43 @@ void onReceiveBroadcast(const BroadcastMessage& message) {
   */
 }
 
+void readDeviceId(byte deviceId[DEVICE_ID_LENGTH])
+{
+	for (size_t i = 0; i < DEVICE_ID_LENGTH; i++)
+		deviceId[i] = EEPROM.read(i);
+}
+
+void storeDeviceId(byte deviceId[DEVICE_ID_LENGTH])
+{
+	for (size_t i = 0; i < DEVICE_ID_LENGTH; i++)
+		EEPROM.update(i, deviceId[i]);
+}
+
+void clearDeviceId()
+{
+	for (size_t i = 0; i < DEVICE_ID_LENGTH; i++)
+		EEPROM.update(i, 0);
+}
+
+bool haveEmptyDeviceId()
+{
+	for (size_t i = 0; i < DEVICE_ID_LENGTH; i++)
+		if (EEPROM.read(i))
+			return false;
+	return true;
+}
+
+void newDevice(const String& deviceIdStr)
+{
+	Serial.println("asked to add new device");
+
+	if (!haveEmptyDeviceId())
+		return;
+	Serial.println("began to program device id");
+	byte deviceId[DEVICE_ID_LENGTH + 1];//to fit \0
+	deviceIdStr.getBytes((unsigned char*)deviceId, DEVICE_ID_LENGTH + 1);
+	storeDeviceId(deviceId);
+}
 
 void onConfirmation(const ConfirmationMessage& message) 
 {
@@ -112,7 +165,7 @@ void onConfirmation(const ConfirmationMessage& message)
 	}
 }
 
-void startSendingResponse()
+void retrySendingResponse()
 {
 	if (responseToSend)
 	{
@@ -124,7 +177,9 @@ void startSendingResponse()
 void replyRegisteredDevices()
 {
 	Serial.println("Started replying.");
+	byte deviceId[DEVICE_ID_LENGTH];
+	readDeviceId(deviceId);
 	responseToSend = new ResponseMessage(RegisteredDevices, deviceId, NULL, 0);
-	startSendingResponse();
+	retrySendingResponse();
 }
 
