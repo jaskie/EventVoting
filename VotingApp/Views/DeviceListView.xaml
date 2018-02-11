@@ -12,7 +12,6 @@
             <ToolBarPanel Orientation="Horizontal">
                 <Button x:Name="NewDevice" Content="{StaticResource DeviceNewIcon}" ToolTip="Register new device"/>
                 <Button x:Name="DeleteDevice" Content="{StaticResource DeviceDeleteIcon}" ToolTip="Delete selected device"/>
-                <Button x:Name="StartVoting" Content="{StaticResource VotingStartIcon}" ToolTip="Start voting"/>
             </ToolBarPanel>
         </ToolBar>
         <TextBlock Text="Device list" Style="{StaticResource TableHeaderTextBlock}"/>

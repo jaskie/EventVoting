@@ -104,20 +104,22 @@ void lcdPrintBytes(const byte* content, const byte contentLength)
 	u8g2.setFont(u8g2_font_pxplusibmvga8_m_all);
 	u8g2.setFontDirection(0);
 	u8g2.clearBuffer();
-	u8g2.setCursor(0, 15);
+	u8g2.setCursor(0, 28);
 	u8g2.print((char*)content);
 	u8g2.sendBuffer();
 }
 
-void lcdPrintString(const String& content)
+void lcdPrintNumber(const byte& value)
 {
-	u8g2.setFont(u8g2_font_pxplusibmvga8_m_all);
+	u8g2.setFont(u8g2_font_logisoso46_tn);
 	u8g2.setFontDirection(0);
 	u8g2.clearBuffer();
-	u8g2.setCursor(0, 15);
-	u8g2.print(content);
+	u8g2.setCursor(27, 46);
+	u8g2.print(value);
 	u8g2.sendBuffer();
 }
+
+
 
 void readDeviceId(byte deviceId[DEVICE_ID_LENGTH])
 {
@@ -186,11 +188,12 @@ void replyRegisteredDevices()
 
 void replyWithVote(const byte& value)
 {
-	Serial.println("Started voting.");
+	Serial.print("Voted: ");
+	Serial.println(value);
 	byte deviceId[DEVICE_ID_LENGTH];
 	readDeviceId(deviceId);
 	responseToSend = new ResponseMessage(StartVoting, deviceId, &value, 1);
 	retrySendingResponse();
-	lcdPrintString(String(value));
+	lcdPrintNumber(value);
 }
 

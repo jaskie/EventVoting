@@ -10,20 +10,17 @@
              d:DataContext="{d:DesignInstance vm:EventViewModel}"
              d:DesignHeight="800" d:DesignWidth="1000">
     <DockPanel>
-        <ToolBar ToolBarTray.IsLocked="True" DockPanel.Dock="Top" Height="32">
-            <ToolBarPanel Orientation="Horizontal" >
-                <Button x:Name="NewVoting" Content="{StaticResource VotingNewIcon}" ToolTip="Add new voting"/>
-                <Separator Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}" />
-                <Button x:Name="StartVoting" Content="{StaticResource VotingStartIcon}" ToolTip="Start collecting votes for selected voting"/>
-                <Button x:Name="StopVoting" Content="{StaticResource VotingStopIcon}" ToolTip="Finish collecting votes"/>
-            </ToolBarPanel>
-        </ToolBar>
         <Grid>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition/>
                 <ColumnDefinition/>
             </Grid.ColumnDefinitions>
             <DockPanel>
+                <ToolBar ToolBarTray.IsLocked="True" DockPanel.Dock="Top" Height="32">
+                    <ToolBarPanel Orientation="Horizontal" >
+                        <Button x:Name="NewVoting" Content="{StaticResource VotingNewIcon}" ToolTip="Add new voting"/>
+                    </ToolBarPanel>
+                </ToolBar>
                 <TextBlock Text="Voting list" Style="{StaticResource TableHeaderTextBlock}" />
                 <DataGrid ItemsSource="{Binding Votings}" 
                       SelectedItem="{Binding SelectedVoting}" 

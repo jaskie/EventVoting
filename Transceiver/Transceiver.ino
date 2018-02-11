@@ -25,8 +25,6 @@ void setup() {
 }
 
 void loop() {
-  // put your main code here, to run repeatedly:
-	//LoRaVoting.SendMessage(BroadcastMessage(RegisteredDevices, "asking for registered devices"));
 	if (Serial.available())
 	{
 		size_t bytes_readed = Serial.readBytesUntil('\n', serial_buffer, HOST_BUFFER_SIZE);
@@ -40,7 +38,6 @@ void loop() {
 			}
 		}
 	}
-	//LoRaVoting.SendMessage(BroadcastMessage(NewDevice, "ABCDEFGHIJKLMNOP"));
 }
 
 
@@ -103,8 +100,9 @@ void sendResponseToHost(const ResponseMessage& message)
 	message_buffer[length++] = message.GetType();
 	memcpy(message_buffer + length, message.GetSenderId(), DEVICE_ID_LENGTH);
 	length += DEVICE_ID_LENGTH;
-	message_buffer[length++] = message.GetContentLength();
-	memcpy(message_buffer + length, message.GetContent(), message.GetContentLength());
-	length += message.GetContentLength();
+	byte contentLength = message.GetContentLength();
+	message_buffer[length++] = contentLength;
+	memcpy(message_buffer + length, message.GetContent(), contentLength);
+	length += contentLength;
 	sendToHost(message_buffer, length);
 }

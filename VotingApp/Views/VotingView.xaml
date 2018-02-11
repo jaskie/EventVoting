@@ -8,7 +8,23 @@
              d:DataContext="{d:DesignInstance vm:VotingViewModel}"
              d:DesignHeight="300" d:DesignWidth="300">
     <DockPanel>
-        <TextBlock Text="Selected voting results" Style="{StaticResource TableHeaderTextBlock}"/>
-        <Grid/>
+        <UniformGrid DockPanel.Dock="Top" Columns="2" Height="30" Margin="1">
+            <DockPanel>
+                <Button x:Name="StartVoting" IsEnabled="{Binding CanStartVoting}" Content="{StaticResource VotingStartIcon}" ToolTip="Start collecting votes for selected voting"/>
+                <TextBlock x:Name="Start" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+            </DockPanel>
+            <DockPanel>
+                <Button x:Name="FinishVoting" IsEnabled="{Binding CanFinishVoting}" Content="{StaticResource VotingStopIcon}" ToolTip="Finish collecting votes"/>
+                <TextBlock x:Name="End"  HorizontalAlignment="Center" VerticalAlignment="Center"/>
+            </DockPanel>
+        </UniformGrid>
+        <TextBlock DockPanel.Dock="Top" Text="Selected voting results" Style="{StaticResource TableHeaderTextBlock}"/>
+        <DataGrid ItemsSource="{Binding Votes}" CanUserAddRows="False" CanUserDeleteRows="False" AutoGenerateColumns="False">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="IdDevice" Binding="{Binding IdAppliance}"/>
+                <DataGridTextColumn Header="Result" Binding="{Binding Result}"/>
+            </DataGrid.Columns>
+        </DataGrid>
+
     </DockPanel>
 </UserControl>

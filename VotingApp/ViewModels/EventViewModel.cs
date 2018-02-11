@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Data.Entity;
+using EventVoting.VotingApp.Hardware;
 
 namespace EventVoting.VotingApp.ViewModels
 {
@@ -12,14 +13,17 @@ namespace EventVoting.VotingApp.ViewModels
         private readonly IWindowManager _windowManager;
         private VotingViewModel _selectedVoting;
         private VotingViewModel _votingInProgress;
+        private readonly LoRaTransceiver _loRaTransceiver;
         
         public EventViewModel(Event @event)
         {
             Event = @event;
             _windowManager = IoC.Get<IWindowManager>();
             _db = IoC.Get<VotingDbContext>();
+            _loRaTransceiver = IoC.Get<LoRaTransceiver>();
+            _loRaTransceiver.VoteResponse += _loRaTransceiver_VoteResponse;
             _db.Voting.Where(v => v.IdEvent == @event.Id).Load();
-            Votings = new BindableCollection<VotingViewModel>(_db.Voting.Local.Select(v => new VotingViewModel(v)));
+            Votings = new BindableCollection<VotingViewModel>(_db.Voting.Local.Select(v => new VotingViewModel(v, _db, _loRaTransceiver)));
         }
 
         public Event Event { get; }
@@ -45,7 +49,7 @@ namespace EventVoting.VotingApp.ViewModels
             {
                 _db.Voting.Add(voting);
                 _db.SaveChanges();
-                var vm = new VotingViewModel(voting);
+                var vm = new VotingViewModel(voting, _db, _loRaTransceiver);
                 Votings.Add(vm);
                 SelectedVoting = vm;
             }
@@ -84,6 +88,19 @@ namespace EventVoting.VotingApp.ViewModels
             }
         }
 
+        private void _loRaTransceiver_VoteResponse(object sender, LoRaVoteResponseEventArgs e)
+        {
+            if (SelectedVoting == null)
+                return;
+            if (!SelectedVoting.CanFinishVoting)
+                return;
+            var device = _db.Device.FirstOrDefault(d => d.DeviceId == e.DeviceId);
+            if (device == null)
+                return;
+            SelectedVoting.VoteResponse(device, e.Vote);
+        }
+
+
         #region IDisposable Support
         private bool disposedValue = false; // To detect redundant calls
 
@@ -94,6 +111,7 @@ namespace EventVoting.VotingApp.ViewModels
                 if (disposing)
                 {
                     _db.Dispose();
+                    _loRaTransceiver.VoteResponse -= _loRaTransceiver_VoteResponse;
                 }
                 disposedValue = true;
             }

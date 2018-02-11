@@ -21,7 +21,6 @@ namespace EventVoting.VotingApp.ViewModels
             _windowManager = IoC.Get<IWindowManager>();
             _loRaTransceiver = IoC.Get<LoRaTransceiver>();
             _loRaTransceiver.DeviceResponse += _loRaTransceiver_DeviceResponse;
-            _loRaTransceiver.VoteResponse += _loRaTransceiver_VoteResponse;
             _db.Device.Load();
             Devices = new BindableCollection<DeviceViewModel>(_db.Device.Local.Select(d => new DeviceViewModel(d)));
         }
@@ -40,11 +39,6 @@ namespace EventVoting.VotingApp.ViewModels
                 _db.Device.Remove(vm.Device);
                 _db.SaveChanges();
             }
-        }
-
-        public void StartVoting()
-        {
-            _loRaTransceiver.StartVoting("Głosowanie\nrozpoczęte");
         }
 
         public bool CanDeleteDevice => SelectedDevice != null;
@@ -77,12 +71,7 @@ namespace EventVoting.VotingApp.ViewModels
             Devices.Add(vm);
             SelectedDevice = vm;
         }
-
-        private void _loRaTransceiver_VoteResponse(object sender, LoRaVoteResponseEventArgs e)
-        {
-            System.Windows.MessageBox.Show($"Wynik głosowania {e.Vote}");
-        }
-
+        
 
         #region IDisposable Support
         private bool disposedValue = false; // To detect redundant calls
@@ -94,6 +83,7 @@ namespace EventVoting.VotingApp.ViewModels
                 if (disposing)
                 {
                     _db.Dispose();
+                    _loRaTransceiver.DeviceResponse -= _loRaTransceiver_DeviceResponse;
                 }
                 disposedValue = true;
             }

@@ -76,10 +76,13 @@ namespace EventVoting.VotingApp.Hardware
 
         public void StartVoting(string message)
         {
-            var messageBytes = Encoding.UTF8.GetBytes(message);
-            var packet = new byte[messageBytes.Length + 1];
-            packet[0] = (byte)LoRaMessageType.StartVoting;
-            Buffer.BlockCopy(messageBytes, 0, packet, 1, messageBytes.Length);
+            var packet = PreparePacket(LoRaMessageType.StartVoting, message);
+            WriteThreadEnqueue(() => WritePacket(packet));
+        }
+
+        public void EndVoting(string message)
+        {
+            var packet = PreparePacket(LoRaMessageType.EndVoting, message);
             WriteThreadEnqueue(() => WritePacket(packet));
         }
 
@@ -88,6 +91,15 @@ namespace EventVoting.VotingApp.Hardware
         public event EventHandler<LoRaVoteResponseEventArgs> VoteResponse;
 
         #region privates
+
+        public byte[] PreparePacket(LoRaMessageType type, string message)
+        {
+            var messageBytes = Encoding.UTF8.GetBytes(message);
+            var packet = new byte[messageBytes.Length + 1];
+            packet[0] = (byte)type;
+            Buffer.BlockCopy(messageBytes, 0, packet, 1, messageBytes.Length);
+            return packet;
+        }
 
         private void WritePacket(byte[] packet)
         {
