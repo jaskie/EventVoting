@@ -9,15 +9,23 @@ MessageType LoRaVotingMessage::GetType() const
 	return _type;
 }
 
-BroadcastMessage::BroadcastMessage(const MessageType messageType, const String& content)
+BroadcastMessage::BroadcastMessage(const MessageType messageType, const byte* content, const byte contentLength)
 {
 	_type = messageType;
 	_content = content;
+	_contentLength = contentLength;
 }
 
-String BroadcastMessage::GetContent() const
+
+
+byte* BroadcastMessage::GetContent() const
 {
 	return _content;
+}
+
+byte BroadcastMessage::GetContentLength() const
+{
+	return _contentLength;
 }
 
 ResponseMessage::ResponseMessage(const MessageType type, const byte * senderId, const byte * content, const byte contentLength):

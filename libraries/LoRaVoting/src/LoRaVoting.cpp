@@ -117,7 +117,7 @@ void LoRaVotingClass::handleReceive(int packetSize)
 		return;
 	do
 	{
-		if (_messageBufferPos >= BUFFER_SIZE - 1)
+		if (_messageBufferPos >= LORA_BUFFER_SIZE - 1)
 			discardBuffer();
 		int received = LoRa.read();
 		if (received == -1) // no data available
@@ -233,7 +233,7 @@ void LoRaVotingClass::parseMessage()
 		if (_receivedBroadcastCallback)
 		{
 			String s((char*)(_messageBuffer + 3));
-			BroadcastMessage message((MessageType)_messageBuffer[1], s);
+			BroadcastMessage message((MessageType)_messageBuffer[1], _messageBuffer + 3, _messageBuffer[2]);
 			_receivedBroadcastCallback(message);
 		}
 		return;

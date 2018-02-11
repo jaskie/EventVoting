@@ -1,5 +1,6 @@
 ﻿using Caliburn.Micro;
 using EventVoting.VotingApp.Database;
+using EventVoting.VotingApp.Hardware;
 using EventVoting.VotingApp.ViewModels;
 using System;
 using System.Collections.Generic;
@@ -30,7 +31,8 @@ namespace EventVoting.VotingApp
             _container
                 .PerRequest<VotingDbContext>()
                 .Singleton<IWindowManager, WindowManager>()
-                .Singleton<MainViewModel>();
+                .Singleton<MainViewModel>()
+                .Instance(new LoRaTransceiver(Properties.Settings.Default.ComPort));
             DisplayRootViewFor<MainViewModel>();
         }
 

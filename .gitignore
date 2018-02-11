@@ -9,3 +9,5 @@
 /Transceiver/__vm
 *.filters
 /Keypad/*.user
+/WindowsSerialPort/bin
+/WindowsSerialPort/obj

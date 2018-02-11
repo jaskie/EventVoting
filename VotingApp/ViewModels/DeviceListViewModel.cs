@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using EventVoting.VotingApp.Model;
+using EventVoting.VotingApp.Hardware;
 
 namespace EventVoting.VotingApp.ViewModels
 {
@@ -12,23 +13,23 @@ namespace EventVoting.VotingApp.ViewModels
         private readonly VotingDbContext _db;
         private readonly IWindowManager _windowManager;
         private DeviceViewModel _selectedDevice;
+        private LoRaTransceiver _loRaTransceiver;
 
         public DeviceListViewModel()
         {
             _db = IoC.Get<VotingDbContext>();
             _windowManager = IoC.Get<IWindowManager>();
+            _loRaTransceiver = IoC.Get<LoRaTransceiver>();
+            _loRaTransceiver.DeviceResponse += _loRaTransceiver_DeviceResponse;
+            _loRaTransceiver.VoteResponse += _loRaTransceiver_VoteResponse;
             _db.Device.Load();
             Devices = new BindableCollection<DeviceViewModel>(_db.Device.Local.Select(d => new DeviceViewModel(d)));
         }
 
+
         public void NewDevice()
         {
-            var device = new Device { DeviceId = Guid.NewGuid().ToByteArray(), Type = (int)DeviceTypeEnum.LoRaRemote };
-            _db.Device.Add(device);
-            _db.SaveChanges();
-            var vm = new DeviceViewModel(device);
-            Devices.Add(vm);
-            SelectedDevice = vm;
+            _loRaTransceiver.RegisteredDevicesQuery();
         }
 
         public void DeleteDevice()
@@ -39,6 +40,11 @@ namespace EventVoting.VotingApp.ViewModels
                 _db.Device.Remove(vm.Device);
                 _db.SaveChanges();
             }
+        }
+
+        public void StartVoting()
+        {
+            _loRaTransceiver.StartVoting("Głosowanie\nrozpoczęte");
         }
 
         public bool CanDeleteDevice => SelectedDevice != null;
@@ -56,6 +62,25 @@ namespace EventVoting.VotingApp.ViewModels
                 NotifyOfPropertyChange();
                 NotifyOfPropertyChange(nameof(CanDeleteDevice));
             }
+        }
+
+        private void _loRaTransceiver_DeviceResponse(object sender, LoRaDeviceEventArgs e)
+        {
+            if (!(e.MessageType == LoRaMessageType.RegisteredDevicesQuery || e.MessageType == LoRaMessageType.RegisterNewDevice))
+                return;
+            if (Devices.Any(dvm =>  dvm.Device.DeviceId.SequenceEqual(e.DeviceId)))
+                return;
+            var device = new Device { DeviceId = e.DeviceId, Type = (int)DeviceTypeEnum.LoRaRemote };
+            _db.Device.Add(device);
+            _db.SaveChanges();
+            var vm = new DeviceViewModel(device);
+            Devices.Add(vm);
+            SelectedDevice = vm;
+        }
+
+        private void _loRaTransceiver_VoteResponse(object sender, LoRaVoteResponseEventArgs e)
+        {
+            System.Windows.MessageBox.Show($"Wynik głosowania {e.Vote}");
         }
 
 

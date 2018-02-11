@@ -14,14 +14,14 @@ Module supporting radio communication
 #endif
 #include "LoRaVotingMessage.h"
 
-#define BUFFER_SIZE 0x100
+#define LORA_BUFFER_SIZE 0x100
 
 
 class LoRaVotingClass
 {
 private:
 	bool _isReady;
-	uint8_t _messageBuffer[BUFFER_SIZE];
+	uint8_t _messageBuffer[LORA_BUFFER_SIZE];
 	volatile size_t _messageBufferPos;
 	void handleReceive(int packetSize);
 	static void onReceive(int packetSize);
